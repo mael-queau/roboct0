@@ -11,14 +11,16 @@ const prisma = new PrismaClient();
  * Search for quotes.
  * @param channelId The channel to search in.
  * @param query The search query.
- * @param page Pagination for the results.
+ * @param limit The maximum number of results to return.
+ * @param offset The number of results to skip.
  * @param force Whether to bypass disabled items.
  * @returns A list of quotes.
  */
 export async function searchQuotes(
   channelId: string,
   query: string = "",
-  page: number = 1,
+  limit: number = 100,
+  offset: number = 0,
   force: boolean = false
 ) {
   if (!force) {
@@ -27,8 +29,12 @@ export async function searchQuotes(
     }
   }
 
-  if (page < 1) {
-    throw new FormattedError("Page number must be a positive integer.", 400);
+  if (limit < 1) {
+    throw new FormattedError("Limit number must be a positive integer.", 400);
+  }
+
+  if (offset < 0) {
+    throw new FormattedError("Limit number must be a positive integer.", 400);
   }
 
   try {
@@ -50,8 +56,8 @@ export async function searchQuotes(
       orderBy: {
         date: "desc",
       },
-      take: 10,
-      skip: 10 * (page - 1),
+      take: limit,
+      skip: offset,
     });
 
     return results;

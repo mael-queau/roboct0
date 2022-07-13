@@ -18,13 +18,14 @@ router.get("/channels", async (req: Request, res: CustomResponse) => {
   try {
     const queryValidator = z.object({
       search: z.string().default(""),
-      page: z
+      limit: z
         .string()
-        .regex(/^\d+$/)
         .optional()
-        .transform((n) => {
-          if (n !== undefined) return parseInt(n);
-        }),
+        .transform((s) => (s === undefined ? undefined : parseInt(s))),
+      offset: z
+        .string()
+        .optional()
+        .transform((s) => (s === undefined ? undefined : parseInt(s))),
       force: z
         .string()
         .optional()
@@ -33,7 +34,12 @@ router.get("/channels", async (req: Request, res: CustomResponse) => {
 
     const query = queryValidator.parse(req.query);
 
-    const results = await searchChannels(query.search, query.page, query.force);
+    const results = await searchChannels(
+      query.search,
+      query.limit,
+      query.offset,
+      query.force
+    );
 
     res.status(200).json({
       success: true,

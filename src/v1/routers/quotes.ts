@@ -64,14 +64,14 @@ router
     try {
       const queryValidator = z.object({
         search: z.string().optional(),
-        page: z
+        limit: z
           .string()
-          .default("1")
-          .refine(
-            (s) => /^[0-9]+$/.test(s) && parseInt(s) > 0,
-            "Page must be a positive integer"
-          )
-          .transform((s) => parseInt(s) - 1),
+          .optional()
+          .transform((s) => (s === undefined ? undefined : parseInt(s))),
+        offset: z
+          .string()
+          .optional()
+          .transform((s) => (s === undefined ? undefined : parseInt(s))),
         force: z
           .string()
           .optional()
@@ -83,7 +83,8 @@ router
       const result = await searchQuotes(
         channelId,
         query.search,
-        query.page,
+        query.limit,
+        query.offset,
         query.force
       );
 

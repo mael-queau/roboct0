@@ -40,7 +40,11 @@ router
 
     try {
       const queryValidator = z.object({
-        page: z
+        limit: z
+          .string()
+          .optional()
+          .transform((s) => (s === undefined ? undefined : parseInt(s))),
+        offset: z
           .string()
           .optional()
           .transform((s) => (s === undefined ? undefined : parseInt(s))),
@@ -52,7 +56,12 @@ router
 
       const query = queryValidator.parse(req.query);
 
-      const results = await listCommands(channelId, query.page, query.force);
+      const results = await listCommands(
+        channelId,
+        query.limit,
+        query.offset,
+        query.force
+      );
 
       res.status(200).json({
         success: true,

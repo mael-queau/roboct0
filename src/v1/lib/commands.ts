@@ -12,13 +12,15 @@ export const keywordRegex = /^[a-zA-Z][a-zA-Z0-9_]{1,14}$/;
 /**
  * List commands for a channel.
  * @param channelId The channel from which to get commands.
- * @param page Pagination for the results.
+ * @param limit The maximum number of results to return.
+ * @param offset The number of results to skip.
  * @param force Whether to bypass disabled items.
  * @returns A list of quotes.
  */
 export async function listCommands(
   channelId: string,
-  page: number = 1,
+  limit: number = 100,
+  offset: number = 0,
   force: boolean = false
 ) {
   if (!force) {
@@ -27,8 +29,12 @@ export async function listCommands(
     }
   }
 
-  if (page < 1) {
-    throw new FormattedError("Page number must be a positive integer.", 400);
+  if (limit < 1) {
+    throw new FormattedError("Limit number must be a positive integer.", 400);
+  }
+
+  if (offset < 0) {
+    throw new FormattedError("Limit number must be a positive integer.", 400);
   }
 
   try {
@@ -47,8 +53,8 @@ export async function listCommands(
       orderBy: {
         keyword: "asc",
       },
-      take: 10,
-      skip: 10 * (page - 1),
+      take: limit,
+      skip: offset,
     });
 
     if (results.length === 0) {
