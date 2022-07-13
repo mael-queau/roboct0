@@ -250,6 +250,7 @@ export async function getChannelToken(channelId: string) {
   try {
     const result = await prisma.channel.findUnique({
       select: {
+        channelId: true,
         token: true,
       },
       where: {
@@ -264,7 +265,7 @@ export async function getChannelToken(channelId: string) {
       );
     }
 
-    return result.token;
+    return result;
   } catch (e) {
     if (e instanceof FormattedError) throw e;
 
