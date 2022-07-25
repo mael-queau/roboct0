@@ -89,7 +89,7 @@ export async function getRandomQuote(channelId: string) {
       throw new FormattedError("No quotes found.", 404);
     }
 
-    return result[crypto.randomInt(0, result.length - 1)];
+    return result[crypto.randomInt(0, result.length)];
   } catch (e) {
     if (e instanceof FormattedError) throw e;
 
