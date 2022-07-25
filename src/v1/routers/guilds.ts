@@ -12,6 +12,14 @@ import {
   verifyGuild,
   deleteGuild,
   getRandomQuote,
+  addModRole,
+  listModRoles,
+  removeModRole,
+  getModRole,
+  listBotTextChannels,
+  addBotTextChannel,
+  getBotTextChannel,
+  removeBotTextChannel,
 } from "../lib/guilds";
 import { refreshTokenByGuildId, verifyToken } from "../../oauth/discord";
 
@@ -317,6 +325,335 @@ router
         res.status(400).json({
           success: false,
           message: e.message,
+        });
+      } else {
+        console.error(e);
+        res.status(500).json({
+          success: false,
+          message: "Internal server error.",
+        });
+      }
+    }
+  });
+
+router
+  .route("/guilds/:guildId/modRoles")
+  .all((req: Request, res: CustomResponse, next) => {
+    if (!req.params.guildId.match(/^[0-9]+$/)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid guild ID.",
+      });
+      return;
+    }
+    next();
+  })
+  .get(async (req: Request, res: CustomResponse) => {
+    const { guildId } = req.params;
+
+    try {
+      const result = await listModRoles(guildId);
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (e) {
+      if (e instanceof FormattedError) e.send(res);
+      else if (e instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          message: "The request body is invalid.",
+        });
+      } else {
+        console.error(e);
+        res.status(500).json({
+          success: false,
+          message: "Internal server error.",
+        });
+      }
+    }
+  })
+  .post(async (req: Request, res: CustomResponse) => {
+    const { guildId } = req.params;
+
+    try {
+      const bodyValidator = z.object({
+        roleId: z.string(),
+      });
+
+      const data = bodyValidator.parse(req.body);
+
+      const result = await addModRole(guildId, data.roleId);
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (e) {
+      if (e instanceof FormattedError) e.send(res);
+      else if (e instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          message: "The request body is invalid.",
+        });
+      } else {
+        console.error(e);
+        res.status(500).json({
+          success: false,
+          message: "Internal server error.",
+        });
+      }
+    }
+  });
+
+router
+  .route("/guilds/:guildId/modRoles/:roleId")
+  .all((req: Request, res: CustomResponse, next) => {
+    if (!req.params.guildId.match(/^[0-9]+$/)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid guild ID.",
+      });
+      return;
+    }
+    if (!req.params.roleId.match(/^[0-9]+$/)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid role ID.",
+      });
+      return;
+    }
+    next();
+  })
+  .get(async (req: Request, res: CustomResponse) => {
+    const { guildId, roleId } = req.params;
+
+    try {
+      const result = await getModRole(guildId, roleId);
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (e) {
+      if (e instanceof FormattedError) e.send(res);
+      else if (e instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          message: "The request body is invalid.",
+        });
+      } else {
+        console.error(e);
+        res.status(500).json({
+          success: false,
+          message: "Internal server error.",
+        });
+      }
+    }
+  })
+  .delete(async (req: Request, res: CustomResponse) => {
+    const { guildId, roleId } = req.params;
+
+    try {
+      const bodyValidator = z.object({
+        force: z.boolean().default(false),
+      });
+
+      const data = bodyValidator.parse(req.body);
+
+      const result = await removeModRole(guildId, roleId, data.force);
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (e) {
+      if (e instanceof FormattedError) e.send(res);
+      else if (e instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          message: "The request body is invalid.",
+        });
+      } else {
+        console.error(e);
+        res.status(500).json({
+          success: false,
+          message: "Internal server error.",
+        });
+      }
+    }
+  });
+
+router
+  .route("/guilds/:guildId/botTextChannels")
+  .all((req: Request, res: CustomResponse, next) => {
+    if (!req.params.guildId.match(/^[0-9]+$/)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid guild ID.",
+      });
+      return;
+    }
+    next();
+  })
+  .get(async (req: Request, res: CustomResponse) => {
+    const { guildId } = req.params;
+
+    try {
+      const queryValidator = z.object({
+        force: z
+          .string()
+          .optional()
+          .transform((s) => s !== undefined),
+      });
+
+      const query = queryValidator.parse(req.query);
+
+      const result = await listBotTextChannels(guildId, query.force);
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (e) {
+      if (e instanceof FormattedError) e.send(res);
+      else if (e instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          message: "The request body is invalid.",
+        });
+      } else {
+        console.error(e);
+        res.status(500).json({
+          success: false,
+          message: "Internal server error.",
+        });
+      }
+    }
+  })
+  .post(async (req: Request, res: CustomResponse) => {
+    const { guildId } = req.params;
+
+    try {
+      const bodyValidator = z.object({
+        textChannelId: z.string(),
+        force: z.boolean().default(false),
+      });
+
+      const body = bodyValidator.parse(req.body);
+
+      const result = await addBotTextChannel(
+        guildId,
+        body.textChannelId,
+        body.force
+      );
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (e) {
+      if (e instanceof FormattedError) e.send(res);
+      else if (e instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          message: "The request body is invalid.",
+        });
+      } else {
+        console.error(e);
+        res.status(500).json({
+          success: false,
+          message: "Internal server error.",
+        });
+      }
+    }
+  });
+
+router
+  .route("/guilds/:guildId/botTextChannels/:textChannelId")
+  .all((req: Request, res: CustomResponse, next) => {
+    if (!req.params.guildId.match(/^[0-9]+$/)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid guild ID.",
+      });
+      return;
+    }
+    if (!req.params.textChannelId.match(/^[0-9]+$/)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid text channel ID.",
+      });
+      return;
+    }
+    next();
+  })
+  .get(async (req: Request, res: CustomResponse) => {
+    const { guildId, textChannelId } = req.params;
+
+    try {
+      const queryValidator = z.object({
+        force: z
+          .string()
+          .optional()
+          .transform((s) => s !== undefined),
+      });
+
+      const query = queryValidator.parse(req.query);
+
+      const result = await getBotTextChannel(
+        guildId,
+        textChannelId,
+        query.force
+      );
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (e) {
+      if (e instanceof FormattedError) e.send(res);
+      else if (e instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          message: "The request body is invalid.",
+        });
+      } else {
+        console.error(e);
+        res.status(500).json({
+          success: false,
+          message: "Internal server error.",
+        });
+      }
+    }
+  })
+  .delete(async (req: Request, res: CustomResponse) => {
+    const { guildId, textChannelId } = req.params;
+
+    try {
+      const bodyValidator = z.object({
+        force: z.boolean().default(false),
+      });
+
+      const data = bodyValidator.parse(req.body);
+
+      const result = await removeBotTextChannel(
+        guildId,
+        textChannelId,
+        data.force
+      );
+
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (e) {
+      if (e instanceof FormattedError) e.send(res);
+      else if (e instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          message: "The request body is invalid.",
         });
       } else {
         console.error(e);

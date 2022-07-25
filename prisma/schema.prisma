@@ -38,16 +38,38 @@ model Channel {
 model Guild {
   id Int @id @default(autoincrement())
 
-  guildId      String
-  token        String
-  refreshToken String
-  lastRefresh  DateTime  @default(now())
-  registeredAt DateTime  @default(now())
-  expiresAt    DateTime
-  enabled      Boolean   @default(true)
-  channels     Channel[]
+  guildId         String
+  token           String
+  refreshToken    String
+  lastRefresh     DateTime         @default(now())
+  registeredAt    DateTime         @default(now())
+  expiresAt       DateTime
+  enabled         Boolean          @default(true)
+  channels        Channel[]
+  modRoles        ModRole[]
+  botTextChannels BotTextChannel[]
 
   @@unique([guildId])
+}
+
+model ModRole {
+  id Int @id @default(autoincrement())
+
+  guild   Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  guildId String
+  roleId  String
+
+  @@unique([guildId, roleId])
+}
+
+model BotTextChannel {
+  id Int @id @default(autoincrement())
+
+  guild         Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  guildId       String
+  textChannelId String
+
+  @@unique([guildId, textChannelId])
 }
 
 model Quote {
