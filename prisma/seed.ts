@@ -12,6 +12,7 @@ async function seed() {
         channelId: generateNumericId(9),
         username: faker.internet.userName(),
         registeredAt: faker.date.past(),
+        expiresAt: faker.date.future(),
         token: faker.datatype.uuid(),
         refreshToken: faker.datatype.uuid(),
         enabled: faker.datatype.boolean(),
@@ -24,6 +25,7 @@ async function seed() {
       data: {
         guildId: generateNumericId(18),
         registeredAt: faker.date.past(),
+        expiresAt: faker.date.future(),
         token: faker.datatype.uuid(),
         refreshToken: faker.datatype.uuid(),
         enabled: faker.datatype.boolean(),

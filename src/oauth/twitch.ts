@@ -50,7 +50,7 @@ router.get("/twitch/callback", async (req, res) => {
       });
     } else {
       // Exchange the grant code for an access token.
-      const { access_token, refresh_token } = await getAccessToken(
+      const { access_token, refresh_token, expires_in } = await getAccessToken(
         parsedQuery.code
       );
 
@@ -65,6 +65,7 @@ router.get("/twitch/callback", async (req, res) => {
           username: userInfo.login,
           token: access_token,
           refreshToken: refresh_token,
+          expiresAt: new Date(Date.now() + expires_in * 1000),
         },
         update: {
           enabled: true,
@@ -80,7 +81,8 @@ router.get("/twitch/callback", async (req, res) => {
       await deleteState(state.value);
 
       console.log(
-        `🎉 ${userInfo.login} just linked their Twitch account.`.blue
+        "[TWITCH] ".magenta +
+          `🎉 ${userInfo.login} just linked their Twitch account.`.blue
       );
 
       res.status(201).json({
@@ -142,6 +144,7 @@ async function getAccessToken(code: string) {
     const validator = z.object({
       access_token: z.string(),
       refresh_token: z.string(),
+      expires_in: z.number(),
     });
     return validator.parse(await response.json());
   }
@@ -153,7 +156,7 @@ async function getAccessToken(code: string) {
  * @param channel A Prisma Channel object (containing token information for a specific user)
  * @returns An updated version of that Prisma Channel object, with the updated token information
  */
-export async function refreshToken(channel: Channel): Promise<Channel> {
+export async function refreshToken(channel: Channel) {
   const parameters = new URLSearchParams();
   parameters.append("client_id", process.env.TWITCH_ID!);
   parameters.append("client_secret", process.env.TWITCH_SECRET!);
@@ -173,9 +176,11 @@ export async function refreshToken(channel: Channel): Promise<Channel> {
     const dataValidator = z.object({
       access_token: z.string(),
       refresh_token: z.string(),
+      expires_in: z.number(),
     });
 
-    const { access_token, refresh_token } = dataValidator.parse(data);
+    const { access_token, refresh_token, expires_in } =
+      dataValidator.parse(data);
 
     // Update the channel's access token and refresh token.
     const result = await prisma.channel.update({
@@ -183,19 +188,22 @@ export async function refreshToken(channel: Channel): Promise<Channel> {
         lastRefresh: new Date(),
         token: access_token,
         refreshToken: refresh_token,
+        expiresAt: new Date(Date.now() + expires_in * 1000),
       },
       where: {
         id: channel.id,
       },
     });
     console.log(
-      `✅ Successfully refreshed token for ${channel.username}`.green
+      "[TWITCH] ".magenta +
+        `✅ Successfully refreshed token for ${channel.username}`.green
     );
     return result;
   } catch (e) {
     console.log(
-      `❌ Failed to refresh token for ${channel.username}. The channel has been disabled.`
-        .red
+      "[TWITCH] ".magenta +
+        `❌ Failed to refresh token for ${channel.username}. The channel has been disabled.`
+          .red
     );
     // There was an error refreshing the token.
     // We need to disable the channel.
@@ -216,16 +224,37 @@ export async function refreshToken(channel: Channel): Promise<Channel> {
 }
 
 /**
+ * Refreshes a Twitch channel's access token.
+ * @param channelId The ID of the channel to refresh.
+ * @returns The updated channel object.
+ */
+export async function refreshTokenByChannelId(channelId: string) {
+  const channel = await prisma.channel.findUnique({
+    where: {
+      channelId: channelId,
+    },
+  });
+
+  if (!channel) {
+    throw new Error("Channel not found.");
+  }
+
+  return refreshToken(channel);
+}
+
+/**
  * Verify all the active tokens from the database and returns a list of channels that need to be refreshed.
  * @returns A list of channels that need to be refreshed.
  */
-export async function verifyTokens(): Promise<Channel[]> {
+export async function verifyAllTokens(): Promise<Channel[]> {
   // Get all the enabled channels' tokens from the database.
   const channels = await prisma.channel.findMany({
     where: { enabled: true },
   });
 
-  console.log(`Verifying ${channels.length} enabled channels...`);
+  console.log(
+    "[TWITCH] ".magenta + `Verifying ${channels.length} enabled channels...`
+  );
 
   const invalidTokens: Channel[] = [];
 
@@ -246,15 +275,70 @@ export async function verifyTokens(): Promise<Channel[]> {
         } else {
           throw new Error(`There was an error verifying token ${channel.id}.`);
         }
+      } else {
+        if (channel.expiresAt < new Date(Date.now() + 30 * 60 * 1000)) {
+          // The access token will expire within the next 30 minutes.
+          // Add the channel to the list of channels that need to be refreshed.
+          invalidTokens.push(channel);
+        }
       }
     } catch (e) {
       console.error(e);
     }
   }
 
-  console.log(`${invalidTokens.length} channels need to be refreshed.`);
+  console.log(
+    "[TWITCH] ".magenta +
+      `${invalidTokens.length} channels need to be refreshed.`
+  );
 
   return invalidTokens;
+}
+
+/**
+ * Validates a Twitch access token using the Twitch API.
+ * @param channelId The Twitch ID to validate the token for.
+ * @returns Whether the token is valid.
+ */
+export async function verifyToken(channelId: string) {
+  const channel = await prisma.channel.findUnique({
+    select: {
+      username: true,
+      token: true,
+      lastRefresh: true,
+      expiresAt: true,
+    },
+    where: {
+      channelId,
+    },
+  });
+
+  if (channel === null) {
+    throw new Error("Channel not found.");
+  }
+
+  if (channel.expiresAt < new Date(Date.now() + 30 * 60 * 1000)) {
+    console.log(
+      "[TWITCH] ".magenta +
+        `⌛ ${channel.username}'s token needs to be refreshed...`.dim
+    );
+    return false;
+  }
+
+  const response = await fetch("https://id.twitch.tv/oauth2/validate", {
+    method: "GET",
+    headers: {
+      Authorization: `OAuth ${channel.token}`,
+    },
+  });
+
+  if (!response.ok)
+    console.log(
+      "[TWITCH] ".magenta +
+        `⌛ ${channel.username}'s token needs to be refreshed...`.dim
+    );
+
+  return response.ok;
 }
 
 /**

@@ -89,7 +89,9 @@ export async function getChannel(id: string, force: boolean = false) {
         "This Twitch channel isn't registered with us.",
         404
       );
-    } else if (!result.enabled && !force) {
+    }
+
+    if (!result.enabled && !force) {
       throw new FormattedError("This Twitch channel is disabled.", 403);
     }
 
@@ -258,6 +260,7 @@ export async function getChannelToken(channelId: string) {
       select: {
         channelId: true,
         token: true,
+        expiresAt: true,
       },
       where: {
         channelId: channelId,

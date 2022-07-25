@@ -9,7 +9,9 @@ import {
   toggleChannel,
   deleteChannel,
   getChannelToken,
+  verifyChannel,
 } from "../lib/channels";
+import { refreshTokenByChannelId, verifyToken } from "../../oauth/twitch";
 
 const router = Router();
 export default router;
@@ -172,6 +174,12 @@ router.get(
     const { channelId } = req.params;
 
     try {
+      await verifyChannel(channelId);
+
+      if (!(await verifyToken(channelId))) {
+        await refreshTokenByChannelId(channelId);
+      }
+
       const result = await getChannelToken(channelId);
 
       res.status(200).json({
