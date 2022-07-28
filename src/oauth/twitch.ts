@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { PrismaClient, Channel } from "@prisma/client";
 import { z, ZodError } from "zod";
-import { createState, deleteState } from "./helper";
+import { createState, deleteState, isValidState } from "./helper";
 
 export const router = Router();
 const prisma = new PrismaClient();
@@ -33,16 +33,10 @@ router.get("/twitch/callback", async (req, res) => {
       scope: z.string(),
       state: z.string(),
     });
+
     const parsedQuery = queryValidator.parse(req.query);
 
-    // Check that the state token matches so that we can prevent CSRF.
-    const state = await prisma.state.findUnique({
-      where: {
-        value: parsedQuery.state,
-      },
-    });
-
-    if (state === null) {
+    if (!(await isValidState(parsedQuery.state))) {
       // State token is invalid.
       res.status(401).json({
         success: false,
@@ -78,7 +72,7 @@ router.get("/twitch/callback", async (req, res) => {
       });
 
       // Delete the state token.
-      await deleteState(state.value);
+      await deleteState(parsedQuery.state);
 
       console.log(
         "[TWITCH] ".magenta +
@@ -122,7 +116,7 @@ router.get("/twitch/callback", async (req, res) => {
  * @param code The grant code to exchange for an access token.
  * @returns The access token and refresh token.
  */
-async function getAccessToken(code: string) {
+export async function getAccessToken(code: string) {
   const params = new URLSearchParams();
   params.append("client_id", process.env.TWITCH_ID!);
   params.append("client_secret", process.env.TWITCH_SECRET!);
@@ -253,7 +247,7 @@ export async function verifyAllTokens(): Promise<Channel[]> {
   });
 
   console.log(
-    "[TWITCH] ".magenta + `Verifying ${channels.length} enabled channels...`
+    "[TWITCH] ".magenta + `⌛ Verifying ${channels.length} enabled channels...`
   );
 
   const invalidTokens: Channel[] = [];
@@ -289,7 +283,7 @@ export async function verifyAllTokens(): Promise<Channel[]> {
 
   console.log(
     "[TWITCH] ".magenta +
-      `${invalidTokens.length} channels need to be refreshed.`
+      `🔁 ${invalidTokens.length} channels need to be refreshed.`
   );
 
   return invalidTokens;

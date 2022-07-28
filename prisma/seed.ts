@@ -58,6 +58,17 @@ async function seed() {
         enabled: faker.datatype.boolean(),
       },
     });
+
+    await prisma.channel.update({
+      data: {
+        quoteIndex: {
+          increment: 1,
+        },
+      },
+      where: {
+        channelId: c[0].channelId,
+      },
+    });
   }
 }
 

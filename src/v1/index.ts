@@ -7,8 +7,10 @@ import channels from "./routers/channels";
 import quotes from "./routers/quotes";
 import commands from "./routers/commands";
 import guilds from "./routers/guilds";
+import users from "./routers/users";
 
 router.use(channels);
 router.use(quotes);
 router.use(commands);
 router.use(guilds);
+router.use(users);

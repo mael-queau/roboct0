@@ -4,6 +4,7 @@ import dotenvExpand from "dotenv-expand";
 import { PrismaClient } from "@prisma/client";
 import * as twitch_oauth from "./oauth/twitch";
 import * as discord_oauth from "./oauth/discord";
+import * as bot_oauth from "./oauth/bot";
 import "colors";
 
 dotenvExpand.expand(dotenv);
@@ -19,8 +20,29 @@ server.use("/api", api);
 const prisma = new PrismaClient();
 prisma.state.deleteMany({});
 
-discord_oauth.verifyAllTokens().then((invalidChannels) => {
-  invalidChannels.forEach(discord_oauth.refreshToken);
+/***** Bot Oauth2 *****/
+
+bot_oauth.checkAndRefresh().catch((error) => {
+  console.error(`[FATAL BOT OAUTH ERROR] SHUTTING DOWN`.bgYellow);
+  console.error(error);
+  process.exit(1);
+});
+
+setInterval(() => {
+  bot_oauth.checkAndRefresh().catch((error) => {
+    console.error(`[FATAL BOT OAUTH ERROR] SHUTTING DOWN`.bgYellow);
+    console.error(error);
+    process.exit(1);
+  });
+}, 1000 * 60 * 60);
+
+/***** User OAuth2 *****/
+
+import oauth from "./oauth";
+server.use("", oauth);
+
+discord_oauth.verifyAllTokens().then((invalidGuilds) => {
+  invalidGuilds.forEach(discord_oauth.refreshToken);
 });
 
 twitch_oauth.verifyAllTokens().then((invalidChannels) => {
@@ -31,10 +53,7 @@ setInterval(() => {
   twitch_oauth.verifyAllTokens().then((invalidChannels) => {
     invalidChannels.forEach(twitch_oauth.refreshToken);
   });
-}, 3600000);
-
-import oauth from "./oauth";
-server.use("", oauth);
+}, 1000 * 60 * 60);
 
 server.listen(port, () => {
   console.log(`🚀 API is listening on port ${port}`.dim);

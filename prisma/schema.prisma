@@ -11,9 +11,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Platform {
+  TWITCH
+  DISCORD
+}
+
+model BotToken {
+  platform    Platform @id
+  accessToken String
+  expiresAt   DateTime
+}
+
 model State {
-  value     String   @id
-  createdAt DateTime @default(now())
+  id Int @id @default(autoincrement())
+
+  value       String
+  createdAt   DateTime            @default(now())
+  pendingLink PendingAccountLink?
+
+  @@unique([value])
 }
 
 model Channel {
@@ -23,53 +39,52 @@ model Channel {
   username     String
   token        String
   refreshToken String
-  lastRefresh  DateTime  @default(now())
-  registeredAt DateTime  @default(now())
+  lastRefresh  DateTime      @default(now())
+  registeredAt DateTime      @default(now())
   expiresAt    DateTime
-  enabled      Boolean   @default(true)
-  quoteIndex   Int       @default(0)
+  enabled      Boolean       @default(true)
+  quoteIndex   Int           @default(0)
   guilds       Guild[]
   quotes       Quote[]
   commands     Command[]
+  users        User[]
+  loveCounters LoveCounter[]
 
   @@unique([channelId])
 }
 
-model Guild {
+model User {
   id Int @id @default(autoincrement())
 
-  guildId         String
-  token           String
-  refreshToken    String
-  lastRefresh     DateTime         @default(now())
-  registeredAt    DateTime         @default(now())
-  expiresAt       DateTime
-  enabled         Boolean          @default(true)
-  channels        Channel[]
-  modRoles        ModRole[]
-  botTextChannels BotTextChannel[]
+  twitchId     String
+  discordId    String?       @unique
+  registeredAt DateTime      @default(now())
+  linkedAt     DateTime?
+  optOut       Boolean       @default(false)
+  channels     Channel[]
+  loveCounters LoveCounter[]
 
-  @@unique([guildId])
+  @@unique([twitchId])
 }
 
-model ModRole {
+model PendingAccountLink {
   id Int @id @default(autoincrement())
 
-  guild   Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
-  guildId String
-  roleId  String
-
-  @@unique([guildId, roleId])
+  discordId String
+  state     State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId   Int    @unique
 }
 
-model BotTextChannel {
+model LoveCounter {
   id Int @id @default(autoincrement())
 
-  guild         Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
-  guildId       String
-  textChannelId String
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  channel   Channel @relation(fields: [channelId], references: [channelId])
+  channelId String
+  counter   Int     @default(0)
 
-  @@unique([guildId, textChannelId])
+  @@unique([userId, channelId])
 }
 
 model Quote {
@@ -107,4 +122,41 @@ model Variable {
   commandId Int
 
   @@unique([commandId, name])
+}
+
+model Guild {
+  id Int @id @default(autoincrement())
+
+  guildId         String
+  token           String
+  refreshToken    String
+  lastRefresh     DateTime         @default(now())
+  registeredAt    DateTime         @default(now())
+  expiresAt       DateTime
+  enabled         Boolean          @default(true)
+  channels        Channel[]
+  modRoles        ModRole[]
+  botTextChannels BotTextChannel[]
+
+  @@unique([guildId])
+}
+
+model ModRole {
+  id Int @id @default(autoincrement())
+
+  guild   Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  guildId String
+  roleId  String
+
+  @@unique([guildId, roleId])
+}
+
+model BotTextChannel {
+  id Int @id @default(autoincrement())
+
+  guild         Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  guildId       String
+  textChannelId String
+
+  @@unique([guildId, textChannelId])
 }

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Guild, PrismaClient } from "@prisma/client";
 import { z, ZodError } from "zod";
-import { createState, deleteState } from "./helper";
+import { createState, deleteState, isValidState } from "./helper";
 
 export const router = Router();
 const prisma = new PrismaClient();
@@ -34,14 +34,7 @@ router.get("/discord/callback", async (req, res) => {
     });
     const parsedQuery = queryValidator.parse(req.query);
 
-    // Check that the state token matches so that we can prevent CSRF.
-    const state = await prisma.state.findUnique({
-      where: {
-        value: parsedQuery.state,
-      },
-    });
-
-    if (state === null) {
+    if (!(await isValidState(parsedQuery.state))) {
       // State token is invalid.
       res.status(401).json({
         success: false,
@@ -73,7 +66,7 @@ router.get("/discord/callback", async (req, res) => {
       });
 
       // Delete the state token.
-      await deleteState(state.value);
+      await deleteState(parsedQuery.state);
 
       console.log(
         "[DISCORD] ".blue +
@@ -250,7 +243,7 @@ export async function verifyAllTokens(): Promise<Guild[]> {
   });
 
   console.log(
-    "[DISCORD] ".blue + `Verifying ${guilds.length} enabled guilds...`
+    "[DISCORD] ".blue + `⌛ Verifying ${guilds.length} enabled guilds...`
   );
 
   const invalidTokens: Guild[] = [];
@@ -282,7 +275,8 @@ export async function verifyAllTokens(): Promise<Guild[]> {
   }
 
   console.log(
-    "[DISCORD] ".blue + `${invalidTokens.length} guilds need to be refreshed.`
+    "[DISCORD] ".blue +
+      `🔁 ${invalidTokens.length} guilds need to be refreshed.`
   );
 
   return invalidTokens;
