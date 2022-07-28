@@ -35,20 +35,20 @@ model State {
 model Channel {
   id Int @id @default(autoincrement())
 
-  channelId    String
-  username     String
-  token        String
-  refreshToken String
-  lastRefresh  DateTime      @default(now())
-  registeredAt DateTime      @default(now())
-  expiresAt    DateTime
-  enabled      Boolean       @default(true)
-  quoteIndex   Int           @default(0)
-  guilds       Guild[]
-  quotes       Quote[]
-  commands     Command[]
-  users        User[]
-  loveCounters LoveCounter[]
+  channelId          String
+  username           String
+  token              String
+  refreshToken       String
+  lastRefresh        DateTime             @default(now())
+  registeredAt       DateTime             @default(now())
+  expiresAt          DateTime
+  enabled            Boolean              @default(true)
+  quoteIndex         Int                  @default(0)
+  guilds             Guild[]
+  quotes             Quote[]
+  commands           Command[]
+  users              User[]
+  ChannelLoveCounter ChannelLoveCounter[]
 
   @@unique([channelId])
 }
@@ -56,15 +56,28 @@ model Channel {
 model User {
   id Int @id @default(autoincrement())
 
-  twitchId     String
-  discordId    String?       @unique
-  registeredAt DateTime      @default(now())
-  linkedAt     DateTime?
-  optOut       Boolean       @default(false)
-  channels     Channel[]
-  loveCounters LoveCounter[]
+  twitchId                 String
+  discordId                String?              @unique
+  registeredAt             DateTime             @default(now())
+  linkedAt                 DateTime?
+  optOut                   Boolean              @default(false)
+  channels                 Channel[]
+  channelCounters          ChannelLoveCounter[]
+  miscellaneousLoveCounter Int                  @default(1)
 
   @@unique([twitchId])
+}
+
+model ChannelLoveCounter {
+  id Int @id @default(autoincrement())
+
+  user      User    @relation(fields: [userId], references: [twitchId], onDelete: Cascade)
+  userId    String  @unique
+  channel   Channel @relation(fields: [channelId], references: [channelId], onDelete: Cascade)
+  channelId String  @unique
+  counter   Int     @default(0)
+
+  @@unique([userId, channelId])
 }
 
 model PendingAccountLink {
@@ -73,18 +86,6 @@ model PendingAccountLink {
   discordId String
   state     State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
   stateId   Int    @unique
-}
-
-model LoveCounter {
-  id Int @id @default(autoincrement())
-
-  user      User    @relation(fields: [userId], references: [id])
-  userId    Int
-  channel   Channel @relation(fields: [channelId], references: [channelId])
-  channelId String
-  counter   Int     @default(0)
-
-  @@unique([userId, channelId])
 }
 
 model Quote {

@@ -34,9 +34,6 @@ export async function upsertTwitchUsers(
 
     const { accessToken } = twitchToken;
 
-    // Convert the list of logins to a list of Twitch IDs.
-    // Use the Twitch API to get the IDs.
-    // Do this in batches of 100.
     const batches = [];
     for (let i = 0; i < users.length; i += 100) {
       batches.push(users.slice(i, i + 100));
@@ -116,6 +113,8 @@ export async function upsertTwitchUsers(
           throw new FormattedError("User not found.", 404);
         case "P2002":
           throw new FormattedError("User already exists.", 409);
+        default:
+          break;
       }
     }
     console.error(e);
@@ -179,6 +178,8 @@ export async function generateLinkUrl(userId: string) {
             "There was an error trying to initiate account linking procedure.",
             409
           );
+        default:
+          break;
       }
     }
     console.error(e);
@@ -198,6 +199,13 @@ export async function getTwitchUserInfo(
 ) {
   try {
     const user = await prisma.user.findUnique({
+      select: {
+        discordId: true,
+        linkedAt: true,
+        optOut: true,
+        twitchId: true,
+        registeredAt: true,
+      },
       where: {
         twitchId,
       },
@@ -263,52 +271,71 @@ export async function getDiscordUserInfo(
  * @returns An object containing the Discord user ID and the Twitch user ID.
  */
 export async function linkAccount(twitchId: string, stateString: string) {
-  if ((await isValidState(stateString)) === false) {
-    throw new FormattedError("Invalid state.", 401);
+  try {
+    if ((await isValidState(stateString)) === false) {
+      throw new FormattedError("Invalid state.", 401);
+    }
+
+    const state = await prisma.state.findUnique({
+      where: {
+        value: stateString,
+      },
+    });
+
+    if (state === null) {
+      throw new FormattedError("Invalid state.", 401);
+    }
+
+    const pendingAccountLink = await prisma.pendingAccountLink.findUnique({
+      where: {
+        stateId: state.id,
+      },
+    });
+
+    if (pendingAccountLink === null) {
+      throw new FormattedError(
+        "This attempt to link accounts has failed. Please try again.",
+        400
+      );
+    }
+
+    const { discordId } = pendingAccountLink;
+
+    await prisma.pendingAccountLink.deleteMany({
+      where: {
+        discordId,
+      },
+    });
+
+    await prisma.user.upsert({
+      create: {
+        discordId,
+        twitchId,
+        linkedAt: new Date(),
+      },
+      update: {
+        discordId,
+        linkedAt: new Date(),
+      },
+      where: {
+        twitchId,
+      },
+    });
+
+    return { discordId, twitchId };
+  } catch (e) {
+    if (e instanceof FormattedError) throw e;
+    if (e instanceof PrismaClientKnownRequestError) {
+      switch (e.code) {
+        case "P2025":
+          throw new FormattedError("User not found.", 404);
+        default:
+          break;
+      }
+    }
+    console.error(e);
+    throw new FormattedError();
   }
-
-  const state = await prisma.state.findUnique({
-    where: {
-      value: stateString,
-    },
-  });
-
-  if (state === null) {
-    throw new FormattedError("Invalid state.", 401);
-  }
-
-  const pendingAccountLink = await prisma.pendingAccountLink.findUnique({
-    where: {
-      stateId: state.id,
-    },
-  });
-
-  if (pendingAccountLink === null) {
-    throw new FormattedError(
-      "This attempt to link accounts has failed. Please try again.",
-      400
-    );
-  }
-
-  const { discordId } = pendingAccountLink;
-
-  await prisma.pendingAccountLink.deleteMany({
-    where: {
-      discordId,
-    },
-  });
-
-  await prisma.user.update({
-    data: {
-      discordId,
-      linkedAt: new Date(),
-    },
-    where: {
-      twitchId,
-    },
-  });
-
-  return { discordId, twitchId };
 }
 
 /**
@@ -362,6 +389,13 @@ export async function unlinkAccount({ discordId, twitchId }: userIds) {
 export async function optInOut(userId: string, toggle?: boolean) {
   try {
     const existing = await prisma.user.findUnique({
+      select: {
+        discordId: true,
+        linkedAt: true,
+        optOut: true,
+        twitchId: true,
+        registeredAt: true,
+      },
       where: {
         twitchId: userId,
       },
@@ -374,6 +408,13 @@ export async function optInOut(userId: string, toggle?: boolean) {
     const result = await prisma.user.update({
       data: {
         optOut: toggle ?? !existing.optOut,
+      },
+      select: {
+        discordId: true,
+        linkedAt: true,
+        optOut: true,
+        twitchId: true,
+        registeredAt: true,
       },
       where: {
         twitchId: userId,
