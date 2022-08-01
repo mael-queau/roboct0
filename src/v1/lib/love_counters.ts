@@ -61,7 +61,7 @@ export async function sendLove(
               increment: 1,
             }
           : undefined,
-        channelCounters: isChannelCounter
+        channelLoveCounters: isChannelCounter
           ? {
               upsert: {
                 create: {
@@ -81,7 +81,7 @@ export async function sendLove(
       },
       select: {
         miscellaneousLoveCounter: !isChannelCounter,
-        channelCounters: isChannelCounter
+        channelLoveCounters: isChannelCounter
           ? {
               select: {
                 counter: true,
@@ -98,7 +98,7 @@ export async function sendLove(
     });
 
     if (isChannelCounter) {
-      return result.channelCounters[0].counter;
+      return result.channelLoveCounters[0].counter;
     } else {
       return result.miscellaneousLoveCounter;
     }
@@ -163,7 +163,7 @@ export async function getLoveCounter(
         twitchId: user.twitchId,
       },
       select: {
-        channelCounters: {
+        channelLoveCounters: {
           where: {
             channelId: channelId,
           },
@@ -171,11 +171,11 @@ export async function getLoveCounter(
       },
     });
 
-    if (result === null || result.channelCounters.length === 0) {
+    if (result === null || result.channelLoveCounters.length === 0) {
       return 0;
     }
 
-    return result.channelCounters[0].counter;
+    return result.channelLoveCounters[0].counter;
   } catch (e) {
     if (e instanceof FormattedError) throw e;
     console.error(e);
@@ -222,7 +222,7 @@ export async function getTotalLove(
       },
       select: {
         miscellaneousLoveCounter: true,
-        channelCounters: {
+        channelLoveCounters: {
           select: {
             counter: true,
           },
@@ -236,7 +236,7 @@ export async function getTotalLove(
 
     return (
       result.miscellaneousLoveCounter +
-      result.channelCounters.reduce((acc, cur) => acc + cur.counter, 0)
+      result.channelLoveCounters.reduce((acc, cur) => acc + cur.counter, 0)
     );
   } catch (e) {
     if (e instanceof FormattedError) throw e;

@@ -19,7 +19,7 @@ export const keywordRegex = /^[a-zA-Z][a-zA-Z0-9_]{1,14}$/;
  */
 export async function listCommands(
   channelId: string,
-  limit: number = 100,
+  limit: number = 20,
   offset: number = 0,
   force: boolean = false
 ) {

@@ -1,8 +1,9 @@
 import { Router, Request } from "express";
-import { CustomResponse } from "../types/response";
-import { getLoveCounter, getTotalLove, sendLove } from "../lib/love_counters";
-import { FormattedError } from "../types/error";
 import { z, ZodError } from "zod";
+import { FormattedError } from "../types/error";
+import { CustomResponse } from "../types/response";
+
+import { getLoveCounter, getTotalLove, sendLove } from "../lib/love_counters";
 
 const router = Router();
 export default router;

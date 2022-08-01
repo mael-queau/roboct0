@@ -19,7 +19,7 @@ const prisma = new PrismaClient();
 export async function searchQuotes(
   channelId: string,
   query: string = "",
-  limit: number = 100,
+  limit: number = 20,
   offset: number = 0,
   force: boolean = false
 ) {

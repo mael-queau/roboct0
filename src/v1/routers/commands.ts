@@ -89,7 +89,7 @@ router
     try {
       const bodyValidator = z.object({
         keyword: z.string(),
-        content: z.string(),
+        content: z.string().max(100),
         force: z.boolean().default(false),
       });
 
@@ -183,7 +183,7 @@ router
 
     try {
       const bodyValidator = z.object({
-        content: z.string(),
+        content: z.string().max(100),
         force: z.boolean().default(false),
       });
 

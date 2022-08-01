@@ -114,7 +114,7 @@ router
     try {
       const bodyValidator = z.object({
         force: z.boolean().default(false),
-        content: z.string(),
+        content: z.string().max(100),
       });
 
       const body = bodyValidator.parse(req.body);
