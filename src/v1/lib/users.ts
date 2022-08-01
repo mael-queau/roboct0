@@ -198,7 +198,7 @@ export async function getTwitchUserInfo(
   force: boolean = false
 ) {
   try {
-    const user = await prisma.user.findUnique({
+    let user = await prisma.user.findUnique({
       select: {
         discordId: true,
         linkedAt: true,
@@ -212,7 +212,54 @@ export async function getTwitchUserInfo(
     });
 
     if (user === null) {
-      throw new FormattedError("User not found.", 404);
+      const twitchToken = await prisma.botToken.findUnique({
+        where: {
+          platform: "TWITCH",
+        },
+      });
+
+      if (twitchToken === null) {
+        console.error(
+          `[BOT OAUTH ERROR] No Twitch bot token was found!`.bgYellow
+        );
+        throw new FormattedError();
+      }
+
+      const { accessToken } = twitchToken;
+
+      const response = await fetch(
+        `https://api.twitch.tv/helix/users?id=${twitchId}`,
+        {
+          headers: {
+            "Client-ID": process.env.TWITCH_ID!,
+            "Authorization": `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.error(`[BOT OAUTH ERROR] ${response.status}`.bgYellow);
+        throw new FormattedError();
+      }
+
+      const { data } = await response.json();
+
+      if (data.length === 0) {
+        throw new FormattedError("This Twitch user does not exist.", 404);
+      }
+
+      user = await prisma.user.create({
+        data: {
+          twitchId,
+        },
+        select: {
+          discordId: true,
+          linkedAt: true,
+          optOut: true,
+          twitchId: true,
+          registeredAt: true,
+        },
+      });
     }
 
     if (!force && user.optOut) {
