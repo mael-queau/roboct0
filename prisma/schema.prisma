@@ -50,6 +50,7 @@ model Channel {
   commands            Command[]
   users               User[]
   channelLoveCounters ChannelLoveCounter[]
+  suggestions         Suggestion[]
 
   @@unique([channelId])
 }
@@ -125,6 +126,20 @@ model Variable {
   commandId Int
 
   @@unique([commandId, name])
+}
+
+model Suggestion {
+  id Int @id @default(autoincrement())
+
+  suggestionId Int
+  content      String
+  date         DateTime @default(now())
+  channel      Channel  @relation(fields: [channelId], references: [channelId], onDelete: Cascade)
+  channelId    String
+  user         User     @relation(fields: [userId], references: [twitchId])
+  userId       String
+
+  @@unique([channelId, suggestionId])
 }
 
 model Guild {
