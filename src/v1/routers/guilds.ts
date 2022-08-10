@@ -1,4 +1,4 @@
-import { Router, Request } from "express";
+import { Router } from "express";
 import { z, ZodError } from "zod";
 import { CustomResponse } from "../types/response";
 import { FormattedError } from "../types/error";
@@ -28,7 +28,7 @@ export default router;
 
 router
   .route("/guilds/:guildId")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.guildId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -38,7 +38,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
@@ -73,7 +73,7 @@ router
       }
     }
   })
-  .patch(async (req: Request, res: CustomResponse) => {
+  .patch(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
@@ -105,7 +105,7 @@ router
       }
     }
   })
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
@@ -134,7 +134,7 @@ router
 
 router
   .route("/guilds/:guildId/channels")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.guildId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -144,7 +144,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
@@ -194,7 +194,7 @@ router
       }
     }
   })
-  .post(async (req: Request, res: CustomResponse) => {
+  .post(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
@@ -234,7 +234,7 @@ router
 
 router
   .route("/guilds/:guildId/channels/:channelId")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.guildId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -251,7 +251,7 @@ router
     }
     next();
   })
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     const { guildId, channelId } = req.params;
 
     try {
@@ -290,7 +290,7 @@ router
 
 router
   .route("/guilds/:guildId/randomQuote")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.guildId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -300,7 +300,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
@@ -338,7 +338,7 @@ router
 
 router
   .route("/guilds/:guildId/modRoles")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.guildId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -348,11 +348,20 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
-      const result = await listModRoles(guildId);
+      const queryValidator = z.object({
+        force: z
+          .string()
+          .optional()
+          .transform((s) => s !== undefined),
+      });
+
+      const { force } = queryValidator.parse(req.query);
+
+      const result = await listModRoles(guildId, force);
 
       res.status(200).json({
         success: true,
@@ -374,17 +383,18 @@ router
       }
     }
   })
-  .post(async (req: Request, res: CustomResponse) => {
+  .post(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
       const bodyValidator = z.object({
         roleId: z.string(),
+        force: z.boolean().default(false),
       });
 
-      const data = bodyValidator.parse(req.body);
+      const { roleId, force } = bodyValidator.parse(req.body);
 
-      const result = await addModRole(guildId, data.roleId);
+      const result = await addModRole(guildId, roleId, force);
 
       res.status(200).json({
         success: true,
@@ -409,7 +419,7 @@ router
 
 router
   .route("/guilds/:guildId/modRoles/:roleId")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.guildId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -426,11 +436,20 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { guildId, roleId } = req.params;
 
     try {
-      const result = await getModRole(guildId, roleId);
+      const queryValidator = z.object({
+        force: z
+          .string()
+          .optional()
+          .transform((s) => s !== undefined),
+      });
+
+      const { force } = queryValidator.parse(req.query);
+
+      const result = await getModRole(guildId, roleId, force);
 
       res.status(200).json({
         success: true,
@@ -452,7 +471,7 @@ router
       }
     }
   })
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     const { guildId, roleId } = req.params;
 
     try {
@@ -487,7 +506,7 @@ router
 
 router
   .route("/guilds/:guildId/botTextChannels")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.guildId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -497,7 +516,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
@@ -532,7 +551,7 @@ router
       }
     }
   })
-  .post(async (req: Request, res: CustomResponse) => {
+  .post(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
@@ -572,7 +591,7 @@ router
 
 router
   .route("/guilds/:guildId/botTextChannels/:textChannelId")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.guildId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -589,7 +608,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { guildId, textChannelId } = req.params;
 
     try {
@@ -628,7 +647,7 @@ router
       }
     }
   })
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     const { guildId, textChannelId } = req.params;
 
     try {
@@ -667,7 +686,7 @@ router
 
 router
   .route("/guilds/:guildId/token")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.guildId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -677,17 +696,26 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { guildId } = req.params;
 
     try {
-      await verifyGuild(guildId);
+      const queryValidator = z.object({
+        force: z
+          .string()
+          .optional()
+          .transform((s) => s !== undefined),
+      });
+
+      const { force } = queryValidator.parse(req.query);
+
+      if (!force) await verifyGuild(guildId);
 
       if (!(await verifyToken(guildId))) {
         await refreshTokenByGuildId(guildId);
       }
 
-      const result = await getGuildToken(guildId);
+      const result = await getGuildToken(guildId, force);
 
       res.status(200).json({
         success: true,

@@ -1,4 +1,4 @@
-import { Router, Request } from "express";
+import { Router } from "express";
 import { z, ZodError } from "zod";
 import { FormattedError } from "../types/error";
 import { CustomResponse } from "../types/response";
@@ -18,7 +18,7 @@ export default router;
 
 router
   .route("/channels/:channelId/suggestions")
-  .all(async (req: Request, res: CustomResponse, next) => {
+  .all(async (req, res: CustomResponse, next) => {
     if (!req.params.channelId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -28,7 +28,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
@@ -77,7 +77,7 @@ router
       }
     }
   })
-  .post(async (req: Request, res: CustomResponse) => {
+  .post(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
@@ -128,7 +128,7 @@ router
       }
     }
   })
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
@@ -182,7 +182,7 @@ router
 
 router
   .route("/channels/:channelId/suggestions/:suggestionId")
-  .all(async (req: Request, res: CustomResponse, next) => {
+  .all(async (req, res: CustomResponse, next) => {
     if (!req.params.channelId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -199,7 +199,7 @@ router
     }
     next();
   })
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     const { channelId, suggestionId } = req.params;
 
     try {
@@ -241,7 +241,7 @@ router
 
 router
   .route("/channels/:channelId/clearSuggestions")
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
@@ -294,7 +294,7 @@ router
 
 router
   .route("/users/:userId/suggestions")
-  .all(async (req: Request, res: CustomResponse, next) => {
+  .all(async (req, res: CustomResponse, next) => {
     if (!req.params.userId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -304,7 +304,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { userId } = req.params;
 
     try {

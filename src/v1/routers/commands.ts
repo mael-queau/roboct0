@@ -1,4 +1,4 @@
-import { Router, Request } from "express";
+import { Router } from "express";
 import { z, ZodError } from "zod";
 import { CustomResponse } from "../types/response";
 import { FormattedError } from "../types/error";
@@ -25,7 +25,7 @@ export default router;
 
 router
   .route("/channels/:channelId/commands")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.channelId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -35,7 +35,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
@@ -83,7 +83,7 @@ router
       }
     }
   })
-  .post(async (req: Request, res: CustomResponse) => {
+  .post(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
@@ -125,7 +125,7 @@ router
 
 router
   .route("/channels/:channelId/commands/:keyword")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.channelId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -142,7 +142,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { channelId, keyword } = req.params;
 
     try {
@@ -178,7 +178,7 @@ router
       }
     }
   })
-  .put(async (req: Request, res: CustomResponse) => {
+  .put(async (req, res: CustomResponse) => {
     const { channelId, keyword } = req.params;
 
     try {
@@ -216,7 +216,7 @@ router
       }
     }
   })
-  .patch(async (req: Request, res: CustomResponse) => {
+  .patch(async (req, res: CustomResponse) => {
     const { channelId, keyword } = req.params;
 
     try {
@@ -254,7 +254,7 @@ router
       }
     }
   })
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     const { channelId, keyword } = req.params;
 
     try {
@@ -289,7 +289,7 @@ router
 
 router.get(
   "/channels/:channelId/commands/:keyword/variables",
-  async (req: Request, res: CustomResponse) => {
+  async (req, res: CustomResponse) => {
     if (!req.params.channelId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -344,7 +344,7 @@ router.get(
 
 router
   .route("/channels/:channelId/commands/:keyword/variables/:name")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.channelId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -368,7 +368,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { channelId, keyword, name } = req.params;
 
     try {
@@ -404,7 +404,7 @@ router
       }
     }
   })
-  .put(async (req: Request, res: CustomResponse) => {
+  .put(async (req, res: CustomResponse) => {
     const { channelId, keyword, name } = req.params;
 
     try {
@@ -443,7 +443,7 @@ router
       }
     }
   })
-  .patch(async (req: Request, res: CustomResponse) => {
+  .patch(async (req, res: CustomResponse) => {
     const { channelId, keyword, name } = req.params;
 
     try {
@@ -482,7 +482,7 @@ router
       }
     }
   })
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     const { channelId, keyword, name } = req.params;
 
     try {

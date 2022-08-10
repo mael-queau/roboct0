@@ -1,4 +1,4 @@
-import { Router, Request } from "express";
+import { Router } from "express";
 import { z, ZodError } from "zod";
 import { FormattedError } from "../types/error";
 import { CustomResponse } from "../types/response";
@@ -10,7 +10,7 @@ export default router;
 
 router
   .route("/love")
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     try {
       const queryValidator = z.object({
         twitchId: z
@@ -51,7 +51,7 @@ router
       }
     }
   })
-  .post(async (req: Request, res: CustomResponse) => {
+  .post(async (req, res: CustomResponse) => {
     try {
       const bodyValidator = z.object({
         twitchId: z
@@ -95,7 +95,7 @@ router
 
 router
   .route("/channels/:channelId/love")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.channelId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -105,7 +105,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
@@ -152,7 +152,7 @@ router
       }
     }
   })
-  .post(async (req: Request, res: CustomResponse) => {
+  .post(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {

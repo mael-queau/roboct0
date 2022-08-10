@@ -50,6 +50,10 @@ export async function searchChannels(
       skip: offset,
     });
 
+    if (results.length === 0) {
+      throw new FormattedError("No channels found.", 404);
+    }
+
     return results.map((result) => ({
       channelId: result.channelId,
       username: result.username,
@@ -58,6 +62,8 @@ export async function searchChannels(
       ...result._count,
     }));
   } catch (e) {
+    if (e instanceof FormattedError) throw e;
+
     console.error(e);
     throw new FormattedError();
   }
@@ -180,10 +186,10 @@ export async function toggleChannel(id: string, enabled?: boolean) {
 
 /**
  * Delete a channel.
- * @param id The channel ID.
+ * @param channelId The channel ID.
  * @returns The deleted channel's information.
  */
-export async function deleteChannel(id: string) {
+export async function deleteChannel(channelId: string) {
   try {
     const result = await prisma.channel.delete({
       select: {
@@ -194,7 +200,7 @@ export async function deleteChannel(id: string) {
         _count: true,
       },
       where: {
-        channelId: id,
+        channelId: channelId,
       },
     });
 
@@ -252,9 +258,19 @@ export async function verifyChannel(id: string) {
 /**
  * Gets the OAuth2 access token for a channel.
  * @param channelId The channel ID.
+ * @param force Whether to bypass disabled items.
  * @returns The OAuth2 token.
  */
-export async function getChannelToken(channelId: string) {
+export async function getChannelToken(
+  channelId: string,
+  force: boolean = false
+) {
+  if (!force) {
+    if ((await verifyChannel(channelId)) === false) {
+      throw new FormattedError("This Twitch channel is disabled.", 403);
+    }
+  }
+
   try {
     const result = await prisma.channel.findUnique({
       select: {

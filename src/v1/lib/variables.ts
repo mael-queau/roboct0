@@ -8,12 +8,9 @@ const prisma = new PrismaClient();
 
 /**
  * A variable looks like this: {{name}}.
- *
  * It can only contain letters, numbers, and underscores.
- *
  * It cannot start with a number or underscore.
- *
- * I cannot be longer than 15 characters.
+ * It cannot be longer than 15 characters.
  */
 export const variableRegex = /\{\{([a-zA-Z_][a-zA-Z0-9_]{0,15})\}\}/g;
 export const variableNameRegex = /[a-zA-Z_][a-zA-Z0-9_]{0,15}/;
@@ -154,6 +151,10 @@ export async function getVariable(
       select: {
         enabled: true,
         variables: {
+          select: {
+            name: true,
+            value: true,
+          },
           where: {
             name: name,
           },

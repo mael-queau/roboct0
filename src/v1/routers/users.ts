@@ -1,4 +1,4 @@
-import { Router, Request } from "express";
+import { Router } from "express";
 import { z, ZodError } from "zod";
 import { FormattedError } from "../types/error";
 import { CustomResponse } from "../types/response";
@@ -17,7 +17,7 @@ export default router;
 
 router
   .route("/users")
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     try {
       const queryValidator = z.object({
         discordId: z.string().regex(/^[0-9]+$/),
@@ -47,7 +47,7 @@ router
       }
     }
   })
-  .post(async (req: Request, res: CustomResponse) => {
+  .post(async (req, res: CustomResponse) => {
     try {
       const bodyValidator = z.object({
         channelId: z.string().optional(),
@@ -83,7 +83,7 @@ router
 
 router
   .route("/users/link")
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     try {
       const bodyValidator = z.object({
         discordId: z.string().regex(/^[0-9]+$/),
@@ -113,7 +113,7 @@ router
       }
     }
   })
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     try {
       const bodyValidator = z.object({
         discordId: z
@@ -153,7 +153,7 @@ router
 
 router
   .route("/users/:userId")
-  .all(async (req: Request, res: CustomResponse, next) => {
+  .all(async (req, res: CustomResponse, next) => {
     if (!req.params.userId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -163,7 +163,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { userId } = req.params;
 
     try {
@@ -198,7 +198,7 @@ router
       }
     }
   })
-  .patch(async (req: Request, res: CustomResponse) => {
+  .patch(async (req, res: CustomResponse) => {
     const { userId } = req.params;
 
     try {

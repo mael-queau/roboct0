@@ -1,4 +1,4 @@
-import { Router, Request } from "express";
+import { Router } from "express";
 import { z, ZodError } from "zod";
 import { CustomResponse } from "../types/response";
 import { FormattedError } from "../types/error";
@@ -16,7 +16,7 @@ import { refreshTokenByChannelId, verifyToken } from "../../oauth/twitch";
 const router = Router();
 export default router;
 
-router.get("/channels", async (req: Request, res: CustomResponse) => {
+router.get("/channels", async (req, res: CustomResponse) => {
   try {
     const queryValidator = z.object({
       search: z.string().default(""),
@@ -66,7 +66,7 @@ router.get("/channels", async (req: Request, res: CustomResponse) => {
 
 router
   .route("/channels/:channelId")
-  .all((req: Request, res: CustomResponse, next) => {
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.channelId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -76,7 +76,7 @@ router
     }
     next();
   })
-  .get(async (req: Request, res: CustomResponse) => {
+  .get(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
@@ -106,7 +106,7 @@ router
       }
     }
   })
-  .patch(async (req: Request, res: CustomResponse) => {
+  .patch(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
@@ -138,7 +138,7 @@ router
       }
     }
   })
-  .delete(async (req: Request, res: CustomResponse) => {
+  .delete(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
@@ -160,9 +160,9 @@ router
     }
   });
 
-router.get(
-  "/channels/:channelId/token",
-  async (req: Request, res: CustomResponse) => {
+router
+  .route("/channels/:channelId/token")
+  .all((req, res: CustomResponse, next) => {
     if (!req.params.channelId.match(/^[0-9]+$/)) {
       res.status(400).json({
         success: false,
@@ -170,17 +170,28 @@ router.get(
       });
       return;
     }
-
+    next();
+  })
+  .get(async (req, res: CustomResponse) => {
     const { channelId } = req.params;
 
     try {
-      await verifyChannel(channelId);
+      const queryValidator = z.object({
+        force: z
+          .string()
+          .optional()
+          .transform((s) => s !== undefined),
+      });
+
+      const { force } = queryValidator.parse(req.query);
+
+      if (!force) await verifyChannel(channelId);
 
       if (!(await verifyToken(channelId))) {
         await refreshTokenByChannelId(channelId);
       }
 
-      const result = await getChannelToken(channelId);
+      const result = await getChannelToken(channelId, force);
 
       res.status(200).json({
         success: true,
@@ -196,5 +207,4 @@ router.get(
         });
       }
     }
-  }
-);
+  });

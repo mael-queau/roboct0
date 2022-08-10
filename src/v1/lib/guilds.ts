@@ -566,6 +566,27 @@ export async function addChannelToGuild(
   }
 
   try {
+    const existing = await prisma.guild.findUnique({
+      select: {
+        channels: {
+          select: {
+            channelId: true,
+          },
+        },
+      },
+      where: {
+        guildId,
+      },
+    });
+
+    if (existing === null) {
+      throw new FormattedError("This guild isn't registered with us.", 404);
+    }
+
+    if (existing.channels.some((c) => c.channelId === channelId)) {
+      throw new FormattedError("This channel is already added.", 409);
+    }
+
     const result = await prisma.guild.update({
       data: {
         channels: {
@@ -590,6 +611,7 @@ export async function addChannelToGuild(
 
     return result;
   } catch (e) {
+    if (e instanceof FormattedError) throw e;
     if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2025")
         throw new FormattedError("This channel isn't registered with us", 404);
@@ -674,7 +696,18 @@ export async function getRandomQuote(guildId: string, force: boolean = false) {
         enabled: true,
         channels: {
           select: {
-            quotes: true,
+            quotes: {
+              select: {
+                channelId: true,
+                content: true,
+                date: true,
+                enabled: true,
+                quoteId: true,
+              },
+              where: {
+                enabled: force ? undefined : true,
+              },
+            },
           },
         },
       },

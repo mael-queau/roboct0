@@ -52,7 +52,10 @@ export async function upsertTwitchUsers(
       );
 
       if (!response.ok) {
-        console.error(`[BOT OAUTH ERROR] ${response.status}`.bgYellow);
+        console.error(
+          `[BOT OAUTH ERROR] ${response.status} - ${response.statusText}`
+            .bgYellow
+        );
         throw new FormattedError();
       }
 
@@ -238,7 +241,10 @@ export async function getTwitchUserInfo(
       );
 
       if (!response.ok) {
-        console.error(`[BOT OAUTH ERROR] ${response.status}`.bgYellow);
+        console.error(
+          `[BOT OAUTH ERROR] ${response.status} - ${response.statusText}`
+            .bgYellow
+        );
         throw new FormattedError();
       }
 

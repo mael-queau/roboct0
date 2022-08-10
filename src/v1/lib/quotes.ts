@@ -49,7 +49,8 @@ export async function searchQuotes(
       where: {
         channelId: channelId,
         content: {
-          search: query,
+          contains: query,
+          mode: "insensitive",
         },
         enabled: force ? undefined : true,
       },
@@ -60,8 +61,14 @@ export async function searchQuotes(
       skip: offset,
     });
 
+    if (results.length === 0) {
+      throw new FormattedError("No quotes found.", 404);
+    }
+
     return results;
   } catch (e) {
+    if (e instanceof FormattedError) throw e;
+
     console.error(e);
     throw new FormattedError();
   }
@@ -70,18 +77,29 @@ export async function searchQuotes(
 /**
  * Get a random quote from a channel.
  * @param channelId The channel to get a quote from.
+ * @param force Whether to bypass disabled items.
  * @returns A random quote.
  */
-export async function getRandomQuote(channelId: string) {
-  if ((await verifyChannel(channelId)) === false) {
+export async function getRandomQuote(
+  channelId: string,
+  force: boolean = false
+) {
+  if (!force && (await verifyChannel(channelId)) === false) {
     throw new FormattedError("This channel is disabled.", 403);
   }
 
   try {
     const result = await prisma.quote.findMany({
+      select: {
+        channelId: true,
+        quoteId: true,
+        content: true,
+        date: true,
+        enabled: true,
+      },
       where: {
         channelId: channelId,
-        enabled: true,
+        enabled: force ? undefined : true,
       },
     });
 
