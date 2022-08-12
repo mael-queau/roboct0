@@ -10,6 +10,7 @@ import guilds from "./routers/guilds";
 import users from "./routers/users";
 import loveCounters from "./routers/love_counters";
 import suggestions from "./routers/suggestions";
+import deathCounters from "./routers/death_counters";
 
 router.use(channels);
 router.use(quotes);
@@ -18,3 +19,4 @@ router.use(guilds);
 router.use(users);
 router.use(loveCounters);
 router.use(suggestions);
+router.use(deathCounters);

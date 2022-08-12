@@ -30,11 +30,11 @@ export async function listCommands(
   }
 
   if (limit < 1) {
-    throw new FormattedError("Limit number must be a positive integer.", 400);
+    throw new FormattedError("Limit must be a positive non-null integer.", 400);
   }
 
   if (offset < 0) {
-    throw new FormattedError("Limit number must be a positive integer.", 400);
+    throw new FormattedError("Offset must be a positive integer.", 400);
   }
 
   try {

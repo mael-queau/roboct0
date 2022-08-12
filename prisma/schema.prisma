@@ -51,6 +51,7 @@ model Channel {
   users               User[]
   channelLoveCounters ChannelLoveCounter[]
   suggestions         Suggestion[]
+  deathCounters       DeathCounter[]
 
   @@unique([channelId])
 }
@@ -102,6 +103,19 @@ model Quote {
   channelId String
 
   @@unique([channelId, quoteId])
+}
+
+model DeathCounter {
+  id Int @id @default(autoincrement())
+
+  gameId    String
+  channel   Channel  @relation(fields: [channelId], references: [channelId])
+  channelId String
+  counter   Int      @default(0)
+  lastDeath DateTime @default(now())
+  enabled   Boolean  @default(true)
+
+  @@unique([channelId, gameId])
 }
 
 model Command {
