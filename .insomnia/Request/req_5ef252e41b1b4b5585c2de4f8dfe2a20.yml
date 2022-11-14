@@ -1,0 +1,23 @@
+_id: req_5ef252e41b1b4b5585c2de4f8dfe2a20
+type: Request
+parentId: fld_ce05f164370846719fe732b6c4a3f4c2
+modified: 1667586111105
+created: 1667584823783
+url: "{{api_url}}/guilds/{{t0_discord}}/botTextChannels"
+name: Get text channels
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823783
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

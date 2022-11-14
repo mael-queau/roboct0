@@ -1,0 +1,30 @@
+_id: req_a7a40dde69154a89bea40318562a27f5
+type: Request
+parentId: fld_ef7ffa5bafb74198af8904e1dc5ac21f
+modified: 1667586120681
+created: 1667584823778
+url: "{{api_url}}/guilds/{{t0_discord}}"
+name: Toggle guild
+description: ""
+method: PATCH
+body:
+  mimeType: ""
+  text: |-
+    {
+        "enabled": true
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823778
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

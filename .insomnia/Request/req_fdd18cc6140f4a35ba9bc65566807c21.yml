@@ -1,0 +1,23 @@
+_id: req_fdd18cc6140f4a35ba9bc65566807c21
+type: Request
+parentId: fld_efacbfa090024104bde9726d6903eb64
+modified: 1667586101322
+created: 1667584823788
+url: "{{api_url}}/guilds/{{t0_discord}}/randomQuote"
+name: Get random quote
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823788
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

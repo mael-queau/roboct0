@@ -1,0 +1,27 @@
+_id: req_5844d163c4ce4d358dcead4e952e92f1
+type: Request
+parentId: fld_b7af37db52094944baae2c36948750fc
+modified: 1668459462213
+created: 1668459410331
+url: "{{api_url}}/gameid"
+name: Get game ID
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_fe023b5f4ed54ca68057fbbf77c0b117
+    name: name
+    value: God Of War
+    description: ""
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823846.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

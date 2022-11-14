@@ -1,0 +1,23 @@
+_id: req_0079778019fb403284be9f61daa7a778
+type: Request
+parentId: fld_ce05f164370846719fe732b6c4a3f4c2
+modified: 1667586115249
+created: 1667584823780
+url: "{{api_url}}/guilds/{{t0_discord}}/botTextChannels/{{t0_textChannel}}"
+name: Remove text channel
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823780
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

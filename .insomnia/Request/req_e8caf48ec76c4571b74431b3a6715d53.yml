@@ -1,0 +1,31 @@
+_id: req_e8caf48ec76c4571b74431b3a6715d53
+type: Request
+parentId: fld_31af8c8ede0e428499427c52d91413a5
+modified: 1667586097517
+created: 1667584823789
+url: "{{api_url}}/guilds/{{t0_discord}}/channels"
+name: Add channel to guild
+description: ""
+method: POST
+body:
+  mimeType: ""
+  text: |-
+    {
+        "channelId": "{{t0_twitch}}",
+        "force": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823789
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,23 @@
+_id: req_8db338ebbebf47198671f983a6c9ad64
+type: Request
+parentId: fld_b7af37db52094944baae2c36948750fc
+modified: 1668458457242
+created: 1668458432227
+url: "{{api_url}}/channels/{{t0_twitch}}/deaths"
+name: Clear deaths
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823796.25
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

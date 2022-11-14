@@ -1,0 +1,31 @@
+_id: req_ada4794897d44fc1ad97c08ed4a9bf97
+type: Request
+parentId: fld_b7af37db52094944baae2c36948750fc
+modified: 1668462523194
+created: 1668462497120
+url: "{{api_url}}/channels/{{t0_twitch}}/deaths/{{ _.t0_gameId }}/toggle"
+name: Toggle counter
+description: ""
+method: PATCH
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"enabled": true,
+    	"force": false
+    }
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1667584823796.2734
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,31 @@
+_id: req_4a9071db7f3a4e0abce9ba35064789ab
+type: Request
+parentId: fld_ce05f164370846719fe732b6c4a3f4c2
+modified: 1667586113687
+created: 1667584823781
+url: "{{api_url}}/guilds/{{t0_discord}}/botTextChannels"
+name: Add text channel
+description: ""
+method: POST
+body:
+  mimeType: ""
+  text: |-
+    {
+        "textChannelId": "{{t0_textChannel}}",
+        "force": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823781
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,31 @@
+_id: req_4c2bf081f4f54164ab035fe0f60112a2
+type: Request
+parentId: fld_e45d0d03c2cc4a70b3ef66a15ee1e369
+modified: 1667586048696
+created: 1667584823811
+url: "{{api_url}}/channels/{{t0_twitch}}/commands/test/variables/var"
+name: Increment variable
+description: ""
+method: PATCH
+body:
+  mimeType: ""
+  text: |-
+    {
+        "value": 5,
+        "force": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823811
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

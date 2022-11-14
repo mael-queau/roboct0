@@ -1,0 +1,38 @@
+_id: req_4689291e449b46d2bf2e59597b25f536
+type: Request
+parentId: fld_7310c4fc945d4c8e9e532c482e6cdf7b
+modified: 1667908214990
+created: 1667907880321
+url: "{{api_url}}/love"
+name: Check total love
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_7d87df3af759432aaa8a43627c2fa511
+    name: twitchId
+    value: "{{ _.t0_twitch }}"
+    description: ""
+    disabled: false
+  - id: pair_ef3cfb2efd85473ca421a5f19c8daf17
+    name: discordId
+    value: "{{ _.t0_discord }}"
+    description: ""
+  - id: pair_217eeb1ad4b74847a60995437c9d26f6
+    name: force
+    value: ""
+    description: ""
+headers:
+  - id: pair_2be2259ab98a4b9f98dac6bc8be46556
+    name: r0_key
+    value: "{{ _.r0_key }}"
+    description: ""
+authentication: {}
+metaSortKey: -1667903075766.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

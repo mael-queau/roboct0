@@ -1,0 +1,31 @@
+_id: req_1235b300e2db4a42819b486035a9ef3d
+type: Request
+parentId: fld_b7af37db52094944baae2c36948750fc
+modified: 1668462457171
+created: 1668462355124
+url: "{{api_url}}/channels/{{t0_twitch}}/deaths/{{ _.t0_gameId }}"
+name: Set game deaths
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"value": 10,
+    	"force": false
+    }
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1667584823796.2812
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

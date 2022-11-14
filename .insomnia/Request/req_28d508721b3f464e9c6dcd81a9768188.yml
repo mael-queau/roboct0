@@ -1,0 +1,30 @@
+_id: req_28d508721b3f464e9c6dcd81a9768188
+type: Request
+parentId: fld_ffbdd25e70174d8b8224db3226f6c042
+modified: 1667907948477
+created: 1667584823771
+url: "{{api_url}}/users/{{t0_twitch}}"
+name: Toggle user
+description: ""
+method: PATCH
+body:
+  mimeType: ""
+  text: |-
+    {
+        "enabled": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823771
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

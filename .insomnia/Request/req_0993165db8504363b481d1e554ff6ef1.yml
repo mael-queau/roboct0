@@ -1,0 +1,23 @@
+_id: req_0993165db8504363b481d1e554ff6ef1
+type: Request
+parentId: fld_bb43ae4bfdbb4819a155d7fea4d657eb
+modified: 1667586064944
+created: 1667584823803
+url: "{{api_url}}/channels/{{t0_twitch}}/randomQuote"
+name: Get random quote
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823803
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

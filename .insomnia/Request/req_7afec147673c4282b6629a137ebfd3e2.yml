@@ -1,0 +1,34 @@
+_id: req_7afec147673c4282b6629a137ebfd3e2
+type: Request
+parentId: fld_70a4c31a6a4d4a9a81b953d368fa4d2a
+modified: 1667908273956
+created: 1667908258609
+url: "{{api_url}}/channels/{{ _.t0_twitch }}/love"
+name: Send love
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"twitchId": "{{ _.t0_twitch }}",
+    	"discordId": "{{ _.t0_discord }}",
+    	"force": false
+    }
+parameters: []
+headers:
+  - id: pair_2be2259ab98a4b9f98dac6bc8be46556
+    name: r0_key
+    value: "{{ _.r0_key }}"
+    description: ""
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1667584823840
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

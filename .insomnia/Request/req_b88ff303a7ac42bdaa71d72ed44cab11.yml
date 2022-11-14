@@ -1,0 +1,23 @@
+_id: req_b88ff303a7ac42bdaa71d72ed44cab11
+type: Request
+parentId: fld_ffbdd25e70174d8b8224db3226f6c042
+modified: 1667586125890
+created: 1667584823775
+url: "{{api_url}}/users?discordId={{t0_discord}}"
+name: Get Twitch ID from Discord ID
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823775
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

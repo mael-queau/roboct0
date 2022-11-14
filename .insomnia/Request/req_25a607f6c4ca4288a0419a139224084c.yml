@@ -1,0 +1,31 @@
+_id: req_25a607f6c4ca4288a0419a139224084c
+type: Request
+parentId: fld_bb43ae4bfdbb4819a155d7fea4d657eb
+modified: 1667907767291
+created: 1667584823801
+url: "{{api_url}}/channels/{{t0_twitch}}/quotes"
+name: Add quote
+description: ""
+method: POST
+body:
+  mimeType: ""
+  text: |-
+    {
+        "content": "Lorem ipsum, this is a test.",
+        "force": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823801
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

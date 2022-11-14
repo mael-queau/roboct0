@@ -1,0 +1,38 @@
+_id: req_3f51bb77f75b47adb2449315a6b755e5
+type: Request
+parentId: fld_b7af37db52094944baae2c36948750fc
+modified: 1668458410297
+created: 1668458171999
+url: "{{api_url}}/channels/{{t0_twitch}}/deaths"
+name: Get deaths
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_ab2ce84c558e4f45bc60ff215c2f0dff
+    name: limit
+    value: "10"
+    description: ""
+    disabled: true
+  - id: pair_abe6d47cf4db4de2b1a2c2a775cd7f46
+    name: offset
+    value: "10"
+    description: ""
+    disabled: true
+  - id: pair_959279afe67a4ae8a35bca76165decbb
+    name: force
+    value: ""
+    description: ""
+    disabled: true
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823796.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,30 @@
+_id: req_ab7becb5035d4ed28fbac748f6c5f0c0
+type: Request
+parentId: fld_bb43ae4bfdbb4819a155d7fea4d657eb
+modified: 1667907464118
+created: 1667584823798
+url: "{{api_url}}/channels/{{t0_twitch}}/quotes/1"
+name: Delete quote
+description: ""
+method: DELETE
+body:
+  mimeType: ""
+  text: |-
+    {
+        "force": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823798
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

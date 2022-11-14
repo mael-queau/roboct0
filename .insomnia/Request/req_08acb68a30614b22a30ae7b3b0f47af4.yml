@@ -1,0 +1,23 @@
+_id: req_08acb68a30614b22a30ae7b3b0f47af4
+type: Request
+parentId: fld_081489637dd042589fe67417bdc2ad1d
+modified: 1667586089306
+created: 1667584823798
+url: "{{api_url}}/channels"
+name: List channels
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823798
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

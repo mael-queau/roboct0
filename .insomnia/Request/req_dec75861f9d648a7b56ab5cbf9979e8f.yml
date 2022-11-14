@@ -1,0 +1,28 @@
+_id: req_dec75861f9d648a7b56ab5cbf9979e8f
+type: Request
+parentId: fld_b7af37db52094944baae2c36948750fc
+modified: 1668459510508
+created: 1668459499524
+url: "{{api_url}}/channels/{{t0_twitch}}/deaths/{{ _.t0_gameId }}"
+name: Get game deaths
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_959279afe67a4ae8a35bca76165decbb
+    name: force
+    value: ""
+    description: ""
+    disabled: true
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823796.375
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

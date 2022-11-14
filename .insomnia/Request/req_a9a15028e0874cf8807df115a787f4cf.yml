@@ -1,0 +1,44 @@
+_id: req_a9a15028e0874cf8807df115a787f4cf
+type: Request
+parentId: fld_a36a1d7643094deea70ac8b9ab4919c8
+modified: 1668458151724
+created: 1668457248810
+url: "{{api_url}}/users/{{t0_twitch}}/suggestions"
+name: Get suggestions
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_a738c7451b9b421da6388c89dc92f903
+    name: channelId
+    value: "{{ _.t0_twitch }}"
+    description: ""
+  - id: pair_425536bf69f94535a7759eaa347460ef
+    name: limit
+    value: "10"
+    description: ""
+    disabled: true
+  - id: pair_5115174e690341ceb832fb9a34684e02
+    name: offset
+    value: "10"
+    description: ""
+    disabled: true
+  - id: pair_9d921531ae324504b3e81426075c5573
+    name: force
+    value: ""
+    description: ""
+    disabled: true
+headers:
+  - id: pair_98e9ebc7d67d46609c8aee92efd8f60f
+    name: r0_key
+    value: "{{ _.r0_key }}"
+    description: ""
+authentication: {}
+metaSortKey: -1668457248810
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,23 @@
+_id: req_b4340a41e58a48e3b4740a7a51322fae
+type: Request
+parentId: fld_90e2125545c948a696d49a5c083ab9a0
+modified: 1667586104025
+created: 1667584823786
+url: "{{api_url}}/guilds/{{t0_discord}}/modRoles"
+name: Get roles
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823786
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

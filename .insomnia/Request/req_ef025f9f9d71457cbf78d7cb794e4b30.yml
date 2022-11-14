@@ -1,0 +1,32 @@
+_id: req_ef025f9f9d71457cbf78d7cb794e4b30
+type: Request
+parentId: fld_bb43ae4bfdbb4819a155d7fea4d657eb
+modified: 1667808907664
+created: 1667584823800
+url: "{{api_url}}/channels/{{t0_twitch}}/quotes/1"
+name: Edit quote
+description: ""
+method: PUT
+body:
+  mimeType: ""
+  text: |-
+    {
+        "content": "Lorem ipsum, this is another test.",
+        "date": "2022-11-01T13:16:31Z",
+        "force": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823800
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

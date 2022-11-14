@@ -1,0 +1,23 @@
+_id: req_cd0ff943ed214f13a54e1298a527b75c
+type: Request
+parentId: fld_e45d0d03c2cc4a70b3ef66a15ee1e369
+modified: 1667586040424
+created: 1667584823813
+url: "{{api_url}}/channels/{{t0_twitch}}/commands/test/variables"
+name: Get command variables
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823813
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

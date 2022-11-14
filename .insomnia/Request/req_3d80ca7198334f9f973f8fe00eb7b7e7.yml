@@ -1,0 +1,25 @@
+_id: req_3d80ca7198334f9f973f8fe00eb7b7e7
+type: Request
+parentId: fld_72f634aea20f406aa6e7596c2998c117
+modified: 1668457102542
+created: 1668457097464
+url: "{{ _.api_url }}/channels/{{ _.t0_twitch }}/clearSuggestions"
+name: Clear suggestions
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers:
+  - id: pair_8f825b374a86422881869a87acbe6c41
+    name: r0_key
+    value: "{{ _.r0_key }}"
+    description: ""
+authentication: {}
+metaSortKey: -1667912933650.0625
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,23 @@
+_id: req_08b55c9236854d768e28ec710d0c5148
+type: Request
+parentId: fld_ef7ffa5bafb74198af8904e1dc5ac21f
+modified: 1667586116620
+created: 1667584823779
+url: "{{api_url}}/guilds/{{t0_discord}}"
+name: Get guild
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823780
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

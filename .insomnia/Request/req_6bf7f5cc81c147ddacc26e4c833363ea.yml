@@ -1,0 +1,31 @@
+_id: req_6bf7f5cc81c147ddacc26e4c833363ea
+type: Request
+parentId: fld_99d6413c90d840f7978802cf38c2dd13
+modified: 1667586029550
+created: 1667584823805
+url: "{{api_url}}/channels/{{t0_twitch}}/commands/test"
+name: Toggle command
+description: ""
+method: PATCH
+body:
+  mimeType: ""
+  text: |-
+    {
+        "enabled": true,
+        "force": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823805
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

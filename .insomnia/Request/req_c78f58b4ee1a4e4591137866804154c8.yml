@@ -1,0 +1,31 @@
+_id: req_c78f58b4ee1a4e4591137866804154c8
+type: Request
+parentId: fld_bb43ae4bfdbb4819a155d7fea4d657eb
+modified: 1667586076828
+created: 1667584823799
+url: "{{api_url}}/channels/{{t0_twitch}}/quotes/1"
+name: Toggle quote
+description: ""
+method: PATCH
+body:
+  mimeType: ""
+  text: |-
+    {
+        "enabled": true,
+        "force": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823799
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

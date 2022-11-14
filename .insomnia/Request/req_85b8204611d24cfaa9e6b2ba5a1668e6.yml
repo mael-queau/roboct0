@@ -1,0 +1,38 @@
+_id: req_85b8204611d24cfaa9e6b2ba5a1668e6
+type: Request
+parentId: fld_70a4c31a6a4d4a9a81b953d368fa4d2a
+modified: 1667908267489
+created: 1667908212417
+url: "{{api_url}}/channels/{{ _.t0_twitch }}/love"
+name: Check love
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_7d87df3af759432aaa8a43627c2fa511
+    name: twitchId
+    value: "{{ _.t0_twitch }}"
+    description: ""
+    disabled: false
+  - id: pair_ef3cfb2efd85473ca421a5f19c8daf17
+    name: discordId
+    value: "{{ _.t0_discord }}"
+    description: ""
+  - id: pair_217eeb1ad4b74847a60995437c9d26f6
+    name: force
+    value: ""
+    description: ""
+headers:
+  - id: pair_2be2259ab98a4b9f98dac6bc8be46556
+    name: r0_key
+    value: "{{ _.r0_key }}"
+    description: ""
+authentication: {}
+metaSortKey: -1667584823890
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

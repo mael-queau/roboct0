@@ -1,0 +1,31 @@
+_id: req_d455caa1f7c64929939f3a616a12f8a9
+type: Request
+parentId: fld_b7af37db52094944baae2c36948750fc
+modified: 1668462460768
+created: 1668459561217
+url: "{{api_url}}/channels/{{t0_twitch}}/deaths/{{ _.t0_gameId }}"
+name: Increment game deaths
+description: ""
+method: PATCH
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"amount": 10,
+    	"force": false
+    }
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1667584823796.3125
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

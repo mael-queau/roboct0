@@ -1,0 +1,23 @@
+_id: req_f5b464e0a17242f7b0fce30cb8c8b631
+type: Request
+parentId: fld_081489637dd042589fe67417bdc2ad1d
+modified: 1667586088535
+created: 1667584823794
+url: "{{api_url}}/channels/{{t0_twitch}}"
+name: Delete channel
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823794
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

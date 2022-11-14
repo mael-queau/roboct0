@@ -1,0 +1,35 @@
+_id: req_e40e9ba9644c494e878db56c3584c7a2
+type: Request
+parentId: fld_72f634aea20f406aa6e7596c2998c117
+modified: 1668457111177
+created: 1668456400844
+url: "{{ _.api_url }}/channels/{{ _.t0_twitch }}/suggestions"
+name: Ungo suggestion(s)
+description: ""
+method: DELETE
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"amount": 2,
+    	"twitchId": "{{ _.t0_twitch }}",
+    	"_discordId": "{{ _.t0_discord }}",
+    	"force": "false"
+    }
+parameters: []
+headers:
+  - id: pair_8f825b374a86422881869a87acbe6c41
+    name: r0_key
+    value: "{{ _.r0_key }}"
+    description: ""
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1667922791583.625
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

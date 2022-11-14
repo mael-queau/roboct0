@@ -1,0 +1,23 @@
+_id: req_b61ed037e4764cfbaeed6ae073874af4
+type: Request
+parentId: fld_31af8c8ede0e428499427c52d91413a5
+modified: 1667586096291
+created: 1667584823791
+url: "{{api_url}}/guilds/{{t0_discord}}/channels"
+name: Get guild channels
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823791
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

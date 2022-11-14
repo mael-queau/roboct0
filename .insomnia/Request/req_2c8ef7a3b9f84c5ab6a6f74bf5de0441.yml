@@ -1,0 +1,36 @@
+_id: req_2c8ef7a3b9f84c5ab6a6f74bf5de0441
+type: Request
+parentId: fld_72f634aea20f406aa6e7596c2998c117
+modified: 1668457372051
+created: 1668455353129
+url: "{{ _.api_url }}/channels/{{ _.t0_twitch }}/suggestions"
+name: Submit suggestion
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"content": "this is a suggestion",
+    	"_twitchId": "{{ _.t0_twitch }}",
+    	"discordId": "{{ _.t0_discord }}",
+    	"force": "false"
+    }
+parameters: []
+headers:
+  - id: pair_8f825b374a86422881869a87acbe6c41
+    name: r0_key
+    value: "{{ _.r0_key }}"
+    description: ""
+  - name: Content-Type
+    value: application/json
+    id: pair_2f155cf84e2f48e59cf1862259fc17e4
+authentication: {}
+metaSortKey: -1667942507400.75
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

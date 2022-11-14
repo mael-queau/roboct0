@@ -1,0 +1,31 @@
+_id: req_8759d374744e42c9ad8555d2bc372656
+type: Request
+parentId: fld_99d6413c90d840f7978802cf38c2dd13
+modified: 1667586026788
+created: 1667584823806
+url: "{{api_url}}/channels/{{t0_twitch}}/commands/test"
+name: Edit command content
+description: ""
+method: PUT
+body:
+  mimeType: ""
+  text: |-
+    {
+        "content": "This is another command with a variable: {{var1}}",
+        "force": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823806
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,23 @@
+_id: req_d03d550a60b143029a6d21a1ed540eed
+type: Request
+parentId: fld_081489637dd042589fe67417bdc2ad1d
+modified: 1667586090263
+created: 1667584823797
+url: "{{api_url}}/channels/{{t0_twitch}}"
+name: Get channel
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823797
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

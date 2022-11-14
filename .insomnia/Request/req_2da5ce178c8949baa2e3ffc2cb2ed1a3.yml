@@ -1,0 +1,32 @@
+_id: req_2da5ce178c8949baa2e3ffc2cb2ed1a3
+type: Request
+parentId: fld_99d6413c90d840f7978802cf38c2dd13
+modified: 1667586024060
+created: 1667584823807
+url: "{{api_url}}/channels/{{t0_twitch}}/commands"
+name: Add command
+description: ""
+method: POST
+body:
+  mimeType: ""
+  text: |-
+    {
+        "keyword": "test",
+        "content": "This is a command with a variable: {{var}}",
+        "force": false
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823807
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

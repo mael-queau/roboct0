@@ -1,0 +1,30 @@
+_id: req_3b3087a0c30241509321fb8ffa1171e6
+type: Request
+parentId: fld_b7af37db52094944baae2c36948750fc
+modified: 1668462456148
+created: 1668462382118
+url: "{{api_url}}/channels/{{t0_twitch}}/deaths/{{ _.t0_gameId }}"
+name: Remove counter
+description: ""
+method: DELETE
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"force": false
+    }
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1667584823796.2656
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

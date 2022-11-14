@@ -1,0 +1,30 @@
+_id: req_6483eea17b3c4fc980eb486deb8100e1
+type: Request
+parentId: fld_081489637dd042589fe67417bdc2ad1d
+modified: 1667586086394
+created: 1667584823795
+url: "{{api_url}}/channels/{{t0_twitch}}"
+name: Toggle channel
+description: ""
+method: PATCH
+body:
+  mimeType: ""
+  text: |-
+    {
+        "enabled": true
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823795
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,23 @@
+_id: req_fd71c0048a87434e8943b22d7be3447d
+type: Request
+parentId: fld_99d6413c90d840f7978802cf38c2dd13
+modified: 1667585948480
+created: 1667584823809
+url: "{{api_url}}/channels/{{t0_twitch}}/commands"
+name: Get commands
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823809
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

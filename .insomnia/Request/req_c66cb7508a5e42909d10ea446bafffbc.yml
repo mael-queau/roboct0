@@ -1,0 +1,23 @@
+_id: req_c66cb7508a5e42909d10ea446bafffbc
+type: Request
+parentId: fld_bb43ae4bfdbb4819a155d7fea4d657eb
+modified: 1667586067614
+created: 1667584823802
+url: "{{api_url}}/channels/{{t0_twitch}}/quotes/1"
+name: Get specific quote
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823802
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,23 @@
+_id: req_c58db014991f474f8e24573a07f8a2ba
+type: Request
+parentId: fld_31af8c8ede0e428499427c52d91413a5
+modified: 1667586098796
+created: 1667584823789
+url: "{{api_url}}/guilds/{{t0_discord}}/channels/{{t0_twitch}}"
+name: Remove channel from guild
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers:
+  - name: r0_key
+    value: "{{ _.r0_key }}"
+authentication: {}
+metaSortKey: -1667584823789
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
