@@ -62,10 +62,7 @@ router
           .string()
           .optional()
           .refine((s) => s === undefined || s.match(/^[0-9]+$/)),
-        force: z
-          .string()
-          .optional()
-          .transform((s) => s !== undefined),
+        force: z.boolean().default(false),
       });
 
       const { twitchId, discordId, force } = bodyValidator.parse(req.body);
@@ -165,10 +162,7 @@ router
           .string()
           .optional()
           .refine((s) => s === undefined || s.match(/^[0-9]+$/)),
-        force: z
-          .string()
-          .optional()
-          .transform((s) => s !== undefined),
+        force: z.boolean().default(false),
       });
 
       const { twitchId, discordId, force } = bodyValidator.parse(req.body);

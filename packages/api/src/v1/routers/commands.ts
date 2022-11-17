@@ -148,7 +148,6 @@ router
     try {
       const queryValidator = z.object({
         force: z
-
           .string()
           .optional()
           .transform((s) => s !== undefined),
@@ -310,7 +309,6 @@ router.get(
     try {
       const queryValidator = z.object({
         force: z
-
           .string()
           .optional()
           .transform((s) => s !== undefined),
@@ -374,7 +372,6 @@ router
     try {
       const queryValidator = z.object({
         force: z
-
           .string()
           .optional()
           .transform((s) => s !== undefined),

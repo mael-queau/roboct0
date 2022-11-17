@@ -19,6 +19,7 @@ router
   .route("/users")
   .get(async (req, res: CustomResponse) => {
     try {
+      // TODO: Fix uncaught 404 error
       const queryValidator = z.object({
         discordId: z.string().regex(/^[0-9]+$/),
       });
@@ -85,13 +86,13 @@ router
   .route("/users/link")
   .get(async (req, res: CustomResponse) => {
     try {
-      const bodyValidator = z.object({
+      const queryValidator = z.object({
         discordId: z.string().regex(/^[0-9]+$/),
       });
 
-      const parsedBody = bodyValidator.parse(req.query);
+      const parsedQuery = queryValidator.parse(req.query);
 
-      const result = await generateLinkUrl(parsedBody.discordId);
+      const result = await generateLinkUrl(parsedQuery.discordId);
 
       res.status(200).json({
         success: true,
@@ -115,6 +116,7 @@ router
   })
   .delete(async (req, res: CustomResponse) => {
     try {
+      // TODO: Fix internal server error when both query parameters are provided.
       const bodyValidator = z.object({
         discordId: z
           .string()
@@ -203,12 +205,12 @@ router
 
     try {
       const bodyValidator = z.object({
-        toggle: z.boolean().optional(),
+        enabled: z.boolean().optional(),
       });
 
       const parsedBody = bodyValidator.parse(req.body);
 
-      const result = await optInOut(userId, parsedBody.toggle);
+      const result = await optInOut(userId, parsedBody.enabled);
 
       res.status(200).json({
         success: true,

@@ -11,7 +11,6 @@ import {
   getGuildToken,
   verifyGuild,
   deleteGuild,
-  getRandomQuote,
   addModRole,
   listModRoles,
   removeModRole,
@@ -277,54 +276,6 @@ router
         res.status(400).json({
           success: false,
           message: "The request body is invalid.",
-        });
-      } else {
-        console.error(e);
-        res.status(500).json({
-          success: false,
-          message: "Internal server error.",
-        });
-      }
-    }
-  });
-
-router
-  .route("/guilds/:guildId/randomQuote")
-  .all((req, res: CustomResponse, next) => {
-    if (!req.params.guildId.match(/^[0-9]+$/)) {
-      res.status(400).json({
-        success: false,
-        message: "Invalid guild ID.",
-      });
-      return;
-    }
-    next();
-  })
-  .get(async (req, res: CustomResponse) => {
-    const { guildId } = req.params;
-
-    try {
-      const queryValidator = z.object({
-        force: z
-          .string()
-          .optional()
-          .transform((s) => s !== undefined),
-      });
-
-      const query = queryValidator.parse(req.query);
-
-      const result = await getRandomQuote(guildId, query.force);
-
-      res.status(200).json({
-        success: true,
-        data: result,
-      });
-    } catch (e) {
-      if (e instanceof FormattedError) e.send(res);
-      else if (e instanceof ZodError) {
-        res.status(400).json({
-          success: false,
-          message: e.message,
         });
       } else {
         console.error(e);

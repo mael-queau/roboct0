@@ -1,2 +1,29 @@
+.env
+dist
+build
+
+##
+## Visual studio code
+##
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+.history/
+*.vsix
+
+##
+## Node
+##
+
 node_modules
+
+##
+## Docker
+##
+
 data

@@ -162,6 +162,8 @@ router
   .patch(async (req, res: CustomResponse) => {
     const { channelId, gameId } = req.params;
 
+    // FIXME: Initialized at 1 no matter what
+
     try {
       const bodyValidator = z.object({
         amount: z.number().default(1),
