@@ -7,7 +7,7 @@ import {
 const data = new SlashCommandSubcommandBuilder()
   .setName("add")
   .setDescription(
-    "Adds a channel to the list of channels included on this server."
+    "Adds a channel to the list of channels included on this server.",
   )
   .addStringOption((option) =>
     option
@@ -31,12 +31,29 @@ async function execute(interaction: ChatInputCommandInteraction) {
       body: JSON.stringify({
         channelId: channel,
       }),
-    }
+    },
   );
   if (response.ok) {
-    await interaction.editReply(`Successfully added channel ${channel}.`);
+    const result = await response.json();
+    console.log(result);
+    if (result.success) {
+      await interaction.editReply(`Successfully added channel ${channel}.`);
+    } else {
+      await interaction.editReply(`Failed to add channel ${channel}.`);
+    }
   } else {
-    await interaction.editReply(`Failed to add channel ${channel}.`);
+    if (response.status == 409) {
+      await interaction.editReply(
+        `Channel ${channel} is already included on this server.`,
+      );
+    } else {
+      console.log(
+        `${"[ERROR]".red} ❌ Got status code ${response.status} when adding channel ${
+          `${channel}`.blue
+        } to guild ${`${interaction.guildId}`.blue}.`,
+      );
+      await interaction.editReply(`Failed to add channel ${channel}.`);
+    }
   }
 }
 
@@ -50,9 +67,21 @@ async function autocomplete(interaction: AutocompleteInteraction) {
         "Content-Type": "application/json",
         "r0_key": process.env.R0_KEY!,
       },
-    }
+    },
   );
-  console.log(await response.json());
+  if (response.status == 404) {
+    interaction.respond([]);
+  } else {
+    const result = await response.json();
+    if (result.success) {
+      interaction.respond(result.data.map((channel: any) => ({
+        name: channel.username,
+        value: channel.channelId,
+      })));
+    } else {
+      interaction.respond([]);
+    }
+  }
 }
 
 export default { data, execute, autocomplete };

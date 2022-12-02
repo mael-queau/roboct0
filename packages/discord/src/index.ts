@@ -1,6 +1,7 @@
 import { Client, Events, GatewayIntentBits, REST, Routes } from "discord.js";
 import dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
+import "colors";
 
 import commands from "./commands";
 
@@ -17,7 +18,7 @@ client.commands = commands;
 async function registerCommands() {
   try {
     const rest = new REST({ version: "10" }).setToken(
-      process.env.DISCORD_TOKEN!
+      process.env.DISCORD_TOKEN!,
     );
 
     console.log("Started refreshing application (/) commands.");
@@ -27,17 +28,17 @@ async function registerCommands() {
         Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!),
         {
           body: commands.map((command) => command.data.toJSON()),
-        }
+        },
       );
     } else {
       await rest.put(
         Routes.applicationGuildCommands(
           process.env.DISCORD_CLIENT_ID!,
-          process.env.DISCORD_GUILD_ID!
+          process.env.DISCORD_GUILD_ID!,
         ),
         {
           body: commands.map((command) => command.data.toJSON()),
-        }
+        },
       );
     }
 
@@ -66,7 +67,7 @@ client.on("interactionCreate", async (interaction) => {
   } else if (interaction.isAutocomplete()) {
     try {
       const autocomplete = client.commands.get(
-        interaction.commandName
+        interaction.commandName,
       )?.autocomplete;
 
       if (autocomplete) {
