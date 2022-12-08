@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 /**
  * Search for channels by name.
- * @param query The search query.
+ * @param query The search query (case-insensitive).
  * @param limit The maximum number of results to return.
  * @param offset The number of results to skip.
  * @param force Whether to bypass disabled items.
@@ -16,7 +16,7 @@ export async function searchChannels(
   query: string,
   limit: number = 20,
   offset: number = 0,
-  force: boolean = false
+  force: boolean = false,
 ) {
   if (limit < 1) {
     throw new FormattedError("Limit must be a positive non-null integer.", 400);
@@ -39,6 +39,7 @@ export async function searchChannels(
         enabled: force ? undefined : true,
         username: {
           contains: query,
+          mode: "insensitive",
         },
       },
       orderBy: {
@@ -49,10 +50,6 @@ export async function searchChannels(
       take: limit,
       skip: offset,
     });
-
-    if (results.length === 0) {
-      throw new FormattedError("No channels found.", 404);
-    }
 
     return results.map((result) => ({
       channelId: result.channelId,
@@ -93,7 +90,7 @@ export async function getChannel(id: string, force: boolean = false) {
     if (result === null) {
       throw new FormattedError(
         "This Twitch channel isn't registered with us.",
-        404
+        404,
       );
     }
 
@@ -137,7 +134,7 @@ export async function toggleChannel(id: string, enabled?: boolean) {
       if (existing === null) {
         throw new FormattedError(
           "This Twitch channel isn't registered with us.",
-          404
+          404,
         );
       } else enabled = !existing.enabled;
     } catch (e) {
@@ -176,7 +173,7 @@ export async function toggleChannel(id: string, enabled?: boolean) {
     if (e instanceof PrismaClientKnownRequestError && e.code === "P2025") {
       throw new FormattedError(
         "This Twitch channel isn't registered with us.",
-        404
+        404,
       );
     }
     console.error(e);
@@ -215,7 +212,7 @@ export async function deleteChannel(channelId: string) {
     if (e instanceof PrismaClientKnownRequestError && e.code === "P2025") {
       throw new FormattedError(
         "This Twitch channel isn't registered with us.",
-        404
+        404,
       );
     }
     console.error(e);
@@ -242,7 +239,7 @@ export async function verifyChannel(id: string) {
     if (result === null) {
       throw new FormattedError(
         "This Twitch channel isn't registered with us.",
-        404
+        404,
       );
     }
 
@@ -263,7 +260,7 @@ export async function verifyChannel(id: string) {
  */
 export async function getChannelToken(
   channelId: string,
-  force: boolean = false
+  force: boolean = false,
 ) {
   if (!force) {
     if ((await verifyChannel(channelId)) === false) {
@@ -286,7 +283,7 @@ export async function getChannelToken(
     if (result === null) {
       throw new FormattedError(
         "This Twitch channel isn't registered with us.",
-        404
+        404,
       );
     }
 

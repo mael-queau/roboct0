@@ -21,7 +21,7 @@ export async function listCommands(
   channelId: string,
   limit: number = 20,
   offset: number = 0,
-  force: boolean = false
+  force: boolean = false,
 ) {
   if (!force) {
     if ((await verifyChannel(channelId)) === false) {
@@ -57,10 +57,6 @@ export async function listCommands(
       skip: offset,
     });
 
-    if (results.length === 0) {
-      throw new FormattedError("No commands found.", 404);
-    }
-
     return results.map((result) => ({
       channelId: result.channelId,
       keyword: result.keyword,
@@ -85,7 +81,7 @@ export async function listCommands(
 export async function getCommand(
   channelId: string,
   keyword: string,
-  force: boolean = false
+  force: boolean = false,
 ) {
   if (!force) {
     if ((await verifyChannel(channelId)) === false) {
@@ -144,7 +140,7 @@ export async function createCommand(
   channelId: string,
   keyword: string,
   content: string,
-  force: boolean = false
+  force: boolean = false,
 ) {
   if (!force) {
     if ((await verifyChannel(channelId)) === false) {
@@ -206,7 +202,7 @@ export async function updateCommand(
   channelId: string,
   keyword: string,
   content: string,
-  force: boolean = false
+  force: boolean = false,
 ) {
   if (!force) {
     if ((await verifyChannel(channelId)) === false) {
@@ -305,7 +301,7 @@ export async function toggleCommand(
   channelId: string,
   keyword: string,
   enabled?: boolean,
-  force: boolean = false
+  force: boolean = false,
 ) {
   if (!force) {
     if ((await verifyChannel(channelId)) === false) {
@@ -378,7 +374,7 @@ export async function toggleCommand(
 export async function deleteCommand(
   channelId: string,
   keyword: string,
-  force: boolean = false
+  force: boolean = false,
 ) {
   if (!force) {
     if ((await verifyChannel(channelId)) === false) {
