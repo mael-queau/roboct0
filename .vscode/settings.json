@@ -2,5 +2,17 @@
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
-  }
+  },
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "Development",
+      "database": "roboct0",
+      "username": "postgres",
+      "password": "postgrespw"
+    }
+  ]
 }
