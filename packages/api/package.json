@@ -1,0 +1,23 @@
+{
+  "name": "@roboct0/api",
+  "module": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@roboct0/api": "workspace:packages/api",
+    "@types/bun": "latest",
+    "@types/pg": "^8.11.4",
+    "drizzle-kit": "^0.20.14"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@trpc/server": "next",
+    "drizzle-orm": "^0.30.4",
+    "pg": "^8.11.3",
+    "zod": "^3.22.4"
+  }
+}
