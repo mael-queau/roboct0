@@ -1,0 +1,24 @@
+{
+  "name": "roboct0",
+  "type": "module",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "dotenv-expand": "^11.0.6"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
+    "@types/bun": "latest",
+    "husky": "^9.0.11",
+    "prettier": "^3.2.5"
+  }
+}
