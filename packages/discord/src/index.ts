@@ -5,10 +5,8 @@ const trpc = createTRPCClient<AppRouter>({
   links: [httpBatchLink({ url: "http://localhost:3000" })],
 });
 
-const todo = await trpc.getTodo.query(1);
+await trpc.todo.createTodo.mutate({ text: "Hello, world!" });
 
-console.log(todo);
+const todos = await trpc.todo.listTodos.query();
 
-const createdTodo = await trpc.addTodo.mutate({ text: "Buy milk" });
-
-console.log(createdTodo);
+console.log(todos);

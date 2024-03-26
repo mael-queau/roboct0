@@ -1,34 +1,9 @@
 import { createHTTPServer } from "@trpc/server/adapters/standalone";
-import { z } from "zod";
-import { publicProcedure, router } from "./trpc";
+import { todoRouter } from "./routers/todo";
+import { router } from "./trpc";
 
 const appRouter = router({
-  listTodos: publicProcedure.query(async () => {
-    const todos = await Promise.resolve([
-      { id: 1, text: "Buy milk", completed: false },
-      { id: 2, text: "Walk the dog", completed: true },
-    ]);
-
-    return todos;
-  }),
-  getTodo: publicProcedure.input(z.number()).query(async ({ input }) => {
-    const user = await Promise.resolve({
-      id: input,
-      text: "Buy milk",
-      completed: false,
-    });
-    return user;
-  }),
-  addTodo: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .mutation(async ({ input }) => {
-      const todo = await Promise.resolve({
-        id: 3,
-        text: input.text,
-        completed: false,
-      });
-      return todo;
-    }),
+  todo: todoRouter,
 });
 
 const server = createHTTPServer({
@@ -38,5 +13,7 @@ const server = createHTTPServer({
 server.listen(3000, () => {
   console.log("Listening on http://localhost:3000");
 });
+
+console.log(process.env.DATABASE_URL);
 
 export type AppRouter = typeof appRouter;
