@@ -1,19 +1,22 @@
-import { createHTTPServer } from "@trpc/server/adapters/standalone";
-import { todoRouter } from "./routers/todo";
-import { router } from "./trpc";
+import { trpcServer } from "@hono/trpc-server";
+import { Hono } from "hono";
+import { appRouter } from "./routers";
+import twitchRouter from "./twitch";
 
-const appRouter = router({
-  todo: todoRouter,
-});
+const app = new Hono();
 
-const server = createHTTPServer({
-  router: appRouter,
-});
+app.use(
+  "/trpc/*",
+  trpcServer({
+    router: appRouter,
+  })
+);
 
-server.listen(3000, () => {
-  console.log("Listening on http://localhost:3000");
-});
+app.route("/twitch", twitchRouter);
 
-console.log(process.env.DATABASE_URL);
+export default {
+  fetch: app.fetch,
+  port: process.env.ROBOCT0_API_PORT ?? 3000,
+};
 
 export type AppRouter = typeof appRouter;
