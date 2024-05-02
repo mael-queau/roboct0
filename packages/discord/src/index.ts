@@ -4,9 +4,3 @@ import { createTRPCClient, httpBatchLink } from "@trpc/client";
 const trpc = createTRPCClient<AppRouter>({
   links: [httpBatchLink({ url: "http://localhost:3000/trpc" })],
 });
-
-await trpc.todo.createTodo.mutate({ text: "Hello, world!" });
-
-const todos = await trpc.todo.listTodos.query();
-
-console.log(todos);
