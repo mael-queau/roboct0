@@ -1,16 +1,22 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../libs/prisma";
 
 export const listTwitchUserTokens = async (expiredOnly = false) => {
   const tokens = await prisma.twitchUserToken.findMany({
+    select: {
+      userId: true,
+      accessToken: true,
+      refreshToken: true,
+      isBotToken: true,
+      obtainedAt: true,
+      expiresIn: true,
+    },
     where: { isBotToken: false },
   });
 
   return expiredOnly
     ? tokens.filter(
         (token) =>
-          token.expiresIn &&
+          token.expiresIn !== null &&
           token.obtainedAt.getTime() + token.expiresIn * 1000 < Date.now()
       )
     : tokens;
@@ -18,8 +24,28 @@ export const listTwitchUserTokens = async (expiredOnly = false) => {
 
 export const getTwitchUserToken = async (userId?: string) => {
   return userId
-    ? prisma.twitchUserToken.findUnique({ where: { userId } })
-    : prisma.twitchUserToken.findFirst({ where: { isBotToken: true } });
+    ? prisma.twitchUserToken.findUnique({
+        select: {
+          userId: true,
+          accessToken: true,
+          refreshToken: true,
+          isBotToken: true,
+          obtainedAt: true,
+          expiresIn: true,
+        },
+        where: { userId },
+      })
+    : prisma.twitchUserToken.findFirst({
+        select: {
+          userId: true,
+          accessToken: true,
+          refreshToken: true,
+          isBotToken: true,
+          obtainedAt: true,
+          expiresIn: true,
+        },
+        where: { isBotToken: true },
+      });
 };
 
 export const createTwitchUserToken = async (
@@ -29,6 +55,14 @@ export const createTwitchUserToken = async (
     data: {
       ...input,
       isBotToken: false,
+    },
+    select: {
+      userId: true,
+      accessToken: true,
+      refreshToken: true,
+      isBotToken: true,
+      obtainedAt: true,
+      expiresIn: true,
     },
   });
 };
@@ -46,6 +80,14 @@ export const updateTwitchUserToken = async (
   input: UpdateTwitchUserTokenInput
 ) => {
   return prisma.twitchUserToken.update({
+    select: {
+      userId: true,
+      accessToken: true,
+      refreshToken: true,
+      isBotToken: true,
+      obtainedAt: true,
+      expiresIn: true,
+    },
     where: { userId },
     data: input,
   });
@@ -59,9 +101,15 @@ interface UpdateTwitchUserTokenInput {
 }
 
 export const deleteTwitchUserToken = async (userId: string) => {
-  return prisma.twitchUserToken.delete({ where: { userId } });
-};
-
-export const deleteAllTwitchUserTokens = async () => {
-  return prisma.twitchUserToken.deleteMany();
+  return prisma.twitchUserToken.delete({
+    select: {
+      userId: true,
+      accessToken: true,
+      refreshToken: true,
+      isBotToken: true,
+      obtainedAt: true,
+      expiresIn: true,
+    },
+    where: { userId },
+  });
 };
