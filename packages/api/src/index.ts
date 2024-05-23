@@ -1,4 +1,5 @@
 import { trpcServer } from "@hono/trpc-server";
+import type { Serve } from "bun";
 import { Hono } from "hono";
 import { logger as honoLogger } from "hono/logger";
 import { LOGGER } from "./logger";
@@ -20,6 +21,6 @@ app.route("/twitch", twitchRouter);
 export default {
   fetch: app.fetch,
   port: process.env.ROBOCT0_API_PORT ?? 3000,
-};
+} satisfies Serve;
 
 export type AppRouter = typeof appRouter;
