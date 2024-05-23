@@ -17,6 +17,7 @@ export const listTwitchUserTokens = async (expiredOnly = false) => {
     ? tokens.filter(
         (token) =>
           token.expiresIn !== null &&
+          token.obtainedAt !== null &&
           token.obtainedAt.getTime() + token.expiresIn * 1000 < Date.now()
       )
     : tokens;
@@ -70,7 +71,7 @@ export const createTwitchUserToken = async (
 interface CreateTwitchUserTokenInput {
   userId: string;
   accessToken: string;
-  refreshToken: string;
+  refreshToken: string | null;
   expiresIn: number | null;
   obtainedAt: Date;
 }
@@ -94,10 +95,10 @@ export const updateTwitchUserToken = async (
 };
 
 interface UpdateTwitchUserTokenInput {
-  accessToken?: string;
-  refreshToken?: string;
-  expiresIn?: number;
-  obtainedAt?: Date;
+  accessToken: string;
+  refreshToken: string | null;
+  expiresIn: number | null;
+  obtainedAt: Date;
 }
 
 export const deleteTwitchUserToken = async (userId: string) => {

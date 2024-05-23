@@ -19,7 +19,7 @@ model TwitchUserToken {
   userId       String   @unique
   isBotToken   Boolean  @default(false)
   accessToken  String
-  refreshToken String
+  refreshToken String?
   expiresIn    Int?
   obtainedAt   DateTime
 
