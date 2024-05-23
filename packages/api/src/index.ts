@@ -1,5 +1,7 @@
 import { trpcServer } from "@hono/trpc-server";
 import { Hono } from "hono";
+import { logger as honoLogger } from "hono/logger";
+import { LOGGER } from "./logger";
 import { appRouter } from "./routers";
 import twitchRouter from "./twitch";
 
@@ -9,7 +11,8 @@ app.use(
   "/trpc/*",
   trpcServer({
     router: appRouter,
-  })
+  }),
+  honoLogger((msg) => LOGGER.log(msg))
 );
 
 app.route("/twitch", twitchRouter);

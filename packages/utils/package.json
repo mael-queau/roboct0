@@ -1,0 +1,14 @@
+{
+  "name": "@roboct0/utils",
+  "module": "src/index.ts",
+  "type": "module",
+  "exports": {
+    "./logger": "./src/logger.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
