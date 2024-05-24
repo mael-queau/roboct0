@@ -2,8 +2,9 @@ import type { AppRouter } from "@roboct0/api";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { ApiClient } from "@twurple/api";
 import { RefreshingAuthProvider } from "@twurple/auth";
-import { ChatClient } from "@twurple/chat";
+import { Bot, createBotCommand } from "@twurple/easy-bot";
 import superjson from "superjson";
+import commands from "./commands";
 import { LOGGER } from "./logger";
 
 const trpc = createTRPCClient<AppRouter>({
@@ -69,37 +70,45 @@ await authProvider.addUserForToken(
     expiresIn: botToken.expiresIn,
     obtainmentTimestamp: botToken.obtainedAt.getTime(),
   },
-  ["chat:read", "chat:edit"]
+  [
+    "chat:read",
+    "chat:edit",
+    "whispers:read",
+    "whispers:edit",
+    "user:manage:whispers",
+  ]
 );
 
-const client = new ChatClient({
+const apiClient = new ApiClient({
   authProvider,
-  authIntents: ["chat:read", "chat:edit"],
+  logger: {
+    colors: true,
+    emoji: true,
+    timestamps: true,
+  },
+});
+
+// const command = createBotCommand("whisper", async (params, context) => {
+//   apiClient.whispers.sendWhisper(
+//     botToken.userId,
+//     context.userId,
+//     `You can invite me on your channel by clicking the link below:\n\n${process.env.ROBOCT0_API_URL}/invite`
+//   );
+// });
+
+const bot = new Bot({
+  authProvider,
+  chatClientOptions: {
+    authIntents: ["chat:read", "chat:edit"],
+  },
   channels: ["roboct0"],
+  commands: commands.map((command) =>
+    createBotCommand(command.keyword, (params, context) =>
+      command.execute(params, context, apiClient)
+    )
+  ),
 });
 
-const apiClient = new ApiClient({ authProvider });
-
-client.connect();
-
-client.onConnect(() => {
+bot.onConnect(() => {
   LOGGER.log("🚀 Connected to Twitch chat");
-});
-
-client.onMessage((channel, user, message, msg) => {
-  if (user === "roboct0") {
-    return;
-  }
-
-  const args = message.split(" ");
-
-  if (!message.startsWith("!")) {
-    return;
-  }
-
-  const command = args.shift()?.slice(1);
-
-  if (command === "ping") {
-    client.say(channel, "Pong!");
-  }
 });
