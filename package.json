@@ -11,6 +11,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@hono/zod-validator": "",
     "colors": "^1.4.0",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6"
