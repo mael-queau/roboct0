@@ -1,8 +1,8 @@
-import { CommandBuilder } from "../../types/Command";
+import { CommandBuilder } from "../../types/commands";
 
 export default new CommandBuilder("ping")
   .setDescription("Pong!")
-  .setHandler(async (params, context, apiClient) => {
+  .setHandler(async (context) => {
     await context.say("Pong!");
   })
   .build();

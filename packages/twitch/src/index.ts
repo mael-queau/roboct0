@@ -104,7 +104,7 @@ const bot = new Bot({
   channels: ["roboct0"],
   commands: commands.map((command) =>
     createBotCommand(command.keyword, (params, context) =>
-      command.execute(params, context, apiClient)
+      command.execute(params, context)
     )
   ),
 });
@@ -112,3 +112,5 @@ const bot = new Bot({
 bot.onConnect(() => {
   LOGGER.log("🚀 Connected to Twitch chat");
 });
+
+export { apiClient, bot };

@@ -1,5 +1,3 @@
-import pingCommand from "./debug/ping"
+import debug from "./debug";
 
-export default [
-  pingCommand,
-]
+export default [...debug];

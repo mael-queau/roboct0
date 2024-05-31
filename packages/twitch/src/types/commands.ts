@@ -1,5 +1,5 @@
-import type { ApiClient } from "@twurple/api";
 import type { BotCommandContext } from "@twurple/easy-bot";
+import { CommandArgumentError, CommandError } from "./errors";
 
 /**
  * Represents a command that can be executed.
@@ -9,11 +9,7 @@ export class CommandBuilder {
   private _description: string | undefined;
   private readonly _arguments: ArgumentBuilder[];
   private _handler:
-    | ((
-        params: string[],
-        context: BotCommandContext,
-        apiClient: ApiClient
-      ) => Promise<void>)
+    | ((context: BotCommandContext, params: string[]) => Promise<void>)
     | undefined;
 
   /**
@@ -37,7 +33,7 @@ export class CommandBuilder {
    */
   get description(): string {
     if (!this._description) {
-      throw new Error("Command description is not set.");
+      throw new CommandError("Command description is not set.");
     }
     return this._description;
   }
@@ -54,36 +50,38 @@ export class CommandBuilder {
 
   private addArgument(type: ArgumentType, argument: ArgumentBuilder): this {
     if (type === ArgumentType.USER && this._arguments.length > 0) {
-      throw new Error(
-        "User arguments must be the first argument in the command."
+      throw new CommandArgumentError(
+        "User arguments must be the first argument in a command."
       );
     }
 
     if (type === ArgumentType.STRING) {
       if (this._arguments.some((arg) => arg.type === ArgumentType.STRING)) {
-        throw new Error("Only one string argument is allowed in a command.");
+        throw new CommandArgumentError(
+          "Only one string argument is allowed in a command."
+        );
       }
     }
 
     // Ensure required arguments come before optional ones
     if (argument.required && this._arguments.some((arg) => !arg.required)) {
-      throw new Error(
+      throw new CommandArgumentError(
         "Required arguments must be defined before optional arguments."
       );
     }
 
     // Ensure only one optional argument and it's the last one
     if (!argument.required && this._arguments.some((arg) => !arg.required)) {
-      throw new Error(
+      throw new CommandArgumentError(
         "Only one optional argument is allowed in a command, and it must be the last argument."
       );
     }
 
     if (this._arguments.some((arg) => arg.name === argument.name)) {
-      throw new Error("Argument names must be unique.");
+      throw new CommandArgumentError("Argument names must be unique.");
     }
 
-    this._arguments.push(argument.setType(type));
+    this._arguments.push(argument.setType(type).build());
     return this;
   }
 
@@ -118,12 +116,11 @@ export class CommandBuilder {
    * Gets the handler function for the command.
    */
   private get handler(): (
-    params: string[],
     context: BotCommandContext,
-    apiClient: ApiClient
+    params: string[]
   ) => Promise<void> {
     if (!this._handler) {
-      throw new Error("Command handler is not set.");
+      throw new CommandError("Command handler is not set.");
     }
     return this._handler;
   }
@@ -134,11 +131,7 @@ export class CommandBuilder {
    * @returns The Command instance.
    */
   setHandler(
-    handler: (
-      params: string[],
-      context: BotCommandContext,
-      apiClient: ApiClient
-    ) => Promise<void>
+    handler: (context: BotCommandContext, params: string[]) => Promise<void>
   ): this {
     this._handler = handler;
     return this;
@@ -150,11 +143,11 @@ export class CommandBuilder {
    */
   build(): this {
     if (!this._description) {
-      throw new Error("Command description is required.");
+      throw new CommandError("Command description is required.");
     }
 
     if (!this._handler) {
-      throw new Error("Command handler is required.");
+      throw new CommandError("Command handler is required.");
     }
 
     return this;
@@ -164,13 +157,9 @@ export class CommandBuilder {
    * Executes the command with the given arguments.
    * @param params The arguments to pass to the command.
    */
-  async execute(
-    params: string[],
-    context: BotCommandContext,
-    apiClient: ApiClient
-  ): Promise<void> {
+  async execute(params: string[], context: BotCommandContext): Promise<void> {
     if (params.length < this._arguments.filter((arg) => arg.required).length) {
-      throw new CommandException(
+      throw new CommandError(
         `Not enough arguments provided. Usage: ${this.getUsage()}`
       );
     }
@@ -179,7 +168,7 @@ export class CommandBuilder {
       params.length > this._arguments.length &&
       this._arguments[this._arguments.length - 1].type !== ArgumentType.STRING
     ) {
-      throw new CommandException(
+      throw new CommandError(
         `Too many arguments provided. Usage: ${this.getUsage()}`
       );
     }
@@ -189,10 +178,10 @@ export class CommandBuilder {
       params.length > 0 &&
       !this._arguments[params.length - 1].validate(params[params.length - 1])
     ) {
-      throw new CommandException("Invalid argument provided.");
+      throw new CommandError("Invalid argument provided.");
     }
 
-    await this.handler(params, context, apiClient);
+    await this.handler(context, params);
   }
 
   /**
@@ -208,7 +197,7 @@ export class CommandBuilder {
 /**
  * Represents an argument for a command.
  */
-class ArgumentBuilder {
+export class ArgumentBuilder {
   private readonly _name: string;
   private _description: string | undefined;
   private _required: boolean = false;
@@ -230,7 +219,7 @@ class ArgumentBuilder {
    */
   get description(): string {
     if (!this._description) {
-      throw new Error("Argument description is not set.");
+      throw new CommandError("Argument description is not set.");
     }
     return this._description;
   }
@@ -247,7 +236,7 @@ class ArgumentBuilder {
    */
   get type(): ArgumentType {
     if (!this._type) {
-      throw new Error("Argument type is not set.");
+      throw new CommandError("Argument type is not set.");
     }
     return this._type;
   }
@@ -306,25 +295,19 @@ class ArgumentBuilder {
    */
   build(): this {
     if (!this._description) {
-      throw new Error("Argument description is required.");
+      throw new CommandError("Argument description is required.");
     }
 
     if (!this._type) {
-      throw new Error("Argument type is required.");
+      throw new CommandError("Argument type is required.");
     }
 
     return this;
   }
 }
 
-enum ArgumentType {
+export enum ArgumentType {
   STRING,
   NUMBER,
   USER,
-}
-
-class CommandException extends Error {
-  constructor(message: string) {
-    super(message);
-  }
 }
