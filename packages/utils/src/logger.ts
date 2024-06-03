@@ -20,15 +20,19 @@ export class Logger {
     }
   }
 
-  log(message: string) {
-    console.log(`${this.prefix} >> ${message}`);
+  log(...args: any[]) {
+    console.log(this.prefix, ">>", ...args);
   }
 
-  debug(message: string) {
-    console.debug(`${this.prefix} ${"[ DEBUG ]".blue} >> ${message}`);
+  info(...args: any[]) {
+    console.info(this.prefix, "[ INFO ]".cyan, ">>", ...args);
   }
 
-  error(message: string, error?: Error) {
-    console.error(`${this.prefix} ${"[ ERROR ]".red} >> ${message}`, error);
+  debug(...args: any[]) {
+    console.debug(this.prefix, "[ DEBUG ]".blue, ">>", ...args);
+  }
+
+  error(...args: any[]) {
+    console.error(this.prefix, "[ ERROR ]".red, ">>", ...args);
   }
 }
