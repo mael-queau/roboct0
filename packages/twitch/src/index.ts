@@ -7,14 +7,9 @@ import superjson from "superjson";
 import commands from "./commands";
 import { LOGGER } from "./logger";
 
-const trpc = createTRPCClient<AppRouter>({
-  links: [
-    httpBatchLink({
-      url: `${process.env.ROBOCT0_API_URL}/trpc`,
-      transformer: superjson,
-    }),
-  ],
-});
+if (!process.env.ROBOCT0_API_URL) {
+  throw new Error("ROBOCT0_API_URL is not set");
+}
 
 if (!process.env.TWITCH_CLIENT_ID) {
   throw new Error("TWITCH_CLIENT_ID is required");
@@ -23,6 +18,15 @@ if (!process.env.TWITCH_CLIENT_ID) {
 if (!process.env.TWITCH_CLIENT_SECRET) {
   throw new Error("TWITCH_CLIENT_SECRET is required");
 }
+
+const trpc = createTRPCClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: `${process.env.ROBOCT0_API_URL}/trpc`,
+      transformer: superjson,
+    }),
+  ],
+});
 
 const authProvider = new RefreshingAuthProvider({
   clientId: process.env.TWITCH_CLIENT_ID,
@@ -87,14 +91,6 @@ const apiClient = new ApiClient({
     timestamps: true,
   },
 });
-
-// const command = createBotCommand("whisper", async (params, context) => {
-//   apiClient.whispers.sendWhisper(
-//     botToken.userId,
-//     context.userId,
-//     `You can invite me on your channel by clicking the link below:\n\n${process.env.ROBOCT0_API_URL}/invite`
-//   );
-// });
 
 const bot = new Bot({
   authProvider,
