@@ -3,6 +3,7 @@ import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import superjson from "superjson";
 
+import commands from "./commands";
 import { LOGGER } from "./logger";
 
 if (!process.env.ROBOCT0_API_URL) {
@@ -42,3 +43,13 @@ client.once(Events.ClientReady, (readyClient) => {
 
 // Log in to Discord with your client's token
 client.login(process.env.DISCORD_TOKEN);
+
+client.on(Events.InteractionCreate, (interaction) => {
+  if (!interaction.isCommand()) return;
+
+  const command = commands.get(interaction.commandName);
+
+  if (!command) return;
+
+  command.execute(interaction);
+});
