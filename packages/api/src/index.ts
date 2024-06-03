@@ -4,6 +4,8 @@ import { Hono } from "hono";
 import { logger as honoLogger } from "hono/logger";
 import { LOGGER } from "./logger";
 import { appRouter } from "./routers";
+
+import discordRouter from "./discord";
 import twitchRouter from "./twitch";
 
 const app = new Hono();
@@ -17,6 +19,7 @@ app.use(
 );
 
 app.route("/twitch", twitchRouter);
+app.route("/discord", discordRouter);
 
 export default {
   fetch: app.fetch,
