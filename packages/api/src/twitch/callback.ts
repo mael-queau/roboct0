@@ -35,9 +35,10 @@ router.get(
       });
     } catch (e) {
       console.error(e);
+      return c.json({ error: "An error occurred" }, 500);
     }
 
-    return c.json({ code });
+    return c.json({ success: true });
   }
 );
 
