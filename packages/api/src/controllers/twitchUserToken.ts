@@ -52,8 +52,13 @@ export const getTwitchUserToken = async (userId?: string) => {
 export const createTwitchUserToken = async (
   input: CreateTwitchUserTokenInput
 ) => {
-  return prisma.twitchUserToken.create({
-    data: {
+  return prisma.twitchUserToken.upsert({
+    where: { userId: input.userId },
+    create: {
+      ...input,
+      isBotToken: false,
+    },
+    update: {
       ...input,
       isBotToken: false,
     },
