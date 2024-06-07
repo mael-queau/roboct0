@@ -13,7 +13,7 @@
     "@roboct0/api": "workspace:packages/api",
     "@types/bun": "latest",
     "@types/pg": "^8.11.6",
-    "prisma": "^5.14.0"
+    "prisma": "^5.15.0"
   },
   "peerDependencies": {
     "typescript": "^5.4.5"
@@ -21,7 +21,7 @@
   "dependencies": {
     "@hono/trpc-server": "^0.1.1",
     "@hono/zod-validator": "^0.2.2",
-    "@prisma/client": "^5.14.0",
+    "@prisma/client": "^5.15.0",
     "@trpc/server": "next",
     "@twurple/auth": "^7.1.0",
     "superjson": "^2.2.1",
