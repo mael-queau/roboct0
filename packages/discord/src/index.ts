@@ -45,11 +45,13 @@ client.once(Events.ClientReady, (readyClient) => {
 client.login(process.env.DISCORD_TOKEN);
 
 client.on(Events.InteractionCreate, (interaction) => {
-  if (!interaction.isCommand()) return;
+  if (interaction.isChatInputCommand()) {
+    const command = commands.get(interaction.commandName);
 
-  const command = commands.get(interaction.commandName);
+    if (!command) return;
 
-  if (!command) return;
-
-  command.execute(interaction);
+    command.execute(interaction);
+  }
 });
+
+export { client, trpc };
