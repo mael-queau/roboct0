@@ -51,6 +51,12 @@ client.on(Events.InteractionCreate, (interaction) => {
     if (!command) return;
 
     command.execute(interaction);
+  } else if (interaction.isAutocomplete()) {
+    const command = commands.get(interaction.commandName);
+
+    if (!command || !command.autocomplete) return;
+
+    command.autocomplete(interaction);
   }
 });
 
