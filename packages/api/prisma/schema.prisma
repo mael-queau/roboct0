@@ -23,6 +23,20 @@ model TwitchUserToken {
   expiresIn    Int?
   obtainedAt   DateTime
 
+  channel TwitchChannel?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TwitchChannel {
+  id String @id @default(cuid())
+
+  userName String @unique
+
+  token   TwitchUserToken @relation(fields: [tokenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tokenId String          @unique
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
