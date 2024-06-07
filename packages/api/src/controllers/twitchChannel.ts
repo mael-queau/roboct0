@@ -13,6 +13,29 @@ export const listTwitchChannels = async (skip = 0, take = 10) => {
   return channels;
 };
 
+export const searchTwitchChannels = async (
+  query: string,
+  skip = 0,
+  take = 10
+) => {
+  const channels = await prisma.twitchChannel.findMany({
+    select: {
+      id: true,
+      userName: true,
+    },
+    where: {
+      userName: {
+        contains: query,
+        mode: "insensitive",
+      },
+    },
+    skip,
+    take,
+  });
+
+  return channels;
+};
+
 export const getTwitchChannel = async (id: string) => {
   return prisma.twitchChannel.findUnique({
     select: {
