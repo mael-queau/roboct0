@@ -39,28 +39,28 @@ const execute = async (interaction: ChatInputCommandInteraction) => {
       await deployCommands(commands, guild);
     } catch (error) {
       await interaction.reply(
-        `Failed to deploy commands${guild ? ` for guild ${guild} : " globally"}` : ""}`
+        `Failed to deploy commands ${guild ? ` for guild ${guild}` : "globally"}`
       );
       console.error(error);
       return;
     }
 
     await interaction.reply(
-      `Successfully deployed commands${guild ? ` for guild ${guild} : " globally"}` : ""}`
+      `Successfully deployed commands ${guild ? ` for guild ${guild}` : "globally"}`
     );
   } else if (subcommand === "clear") {
     try {
       await deployCommands(new Collection(), guild);
     } catch (error) {
       await interaction.reply(
-        `Failed to clear commands${guild ? ` for guild ${guild} : " globally"}` : ""}`
+        `Failed to clear commands ${guild ? ` for guild ${guild}` : "globally"}`
       );
       console.error(error);
       return;
     }
 
     await interaction.reply(
-      `Successfully cleared commands${guild ? ` for guild ${guild} : " globally"}` : ""}`
+      `Successfully cleared commands ${guild ? ` for guild ${guild}` : "globally"}`
     );
   }
 };
