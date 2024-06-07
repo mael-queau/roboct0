@@ -3,7 +3,7 @@ import { CommandBuilder } from "../../types/commands";
 
 export default new CommandBuilder("user")
   .setDescription("Get user information.")
-  .setHandler(async (context, params) => {
+  .setHandler(async (context) => {
     const user = await apiClient.users.getUserById(context.userId);
     if (user) {
       await context.say(
