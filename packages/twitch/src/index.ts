@@ -109,4 +109,6 @@ bot.onConnect(() => {
   LOGGER.log("🚀 Connected to Twitch chat");
 });
 
+export const botUserId = botToken.userId;
+
 export { apiClient, bot };
