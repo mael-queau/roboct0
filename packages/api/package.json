@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@hono/trpc-server": "^0.3.1",
-    "@hono/zod-validator": "^0.2.2",
+    "@hono/zod-validator": "^0.3.0",
     "@prisma/client": "^5.15.0",
     "@trpc/server": "next",
     "@twurple/auth": "^7.1.0",
