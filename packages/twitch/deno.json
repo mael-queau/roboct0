@@ -1,0 +1,4 @@
+{
+  "name": "@roboct0/twitch",
+  "exports": "./main.ts"
+}

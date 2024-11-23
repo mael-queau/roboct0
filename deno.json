@@ -1,0 +1,3 @@
+{
+  "workspace": ["./packages/api", "./packages/twitch", "./packages/discord"]
+}

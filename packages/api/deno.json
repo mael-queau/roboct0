@@ -1,0 +1,15 @@
+{
+  "name": "@roboct0/api",
+  "exports": "./main.ts",
+  "tasks": {
+    "dev": "deno run --watch --allow-net main.ts"
+  },
+  "imports": {
+    "@paralleldrive/cuid2": "npm:@paralleldrive/cuid2@^2.2.2",
+    "@types/pg": "npm:@types/pg@^8.11.10",
+    "drizzle-kit": "npm:drizzle-kit@^0.28.1",
+    "drizzle-orm": "npm:drizzle-orm@^0.36.3",
+    "hono": "npm:hono@^4.6.10",
+    "pg": "npm:pg@^8.13.1"
+  }
+}
